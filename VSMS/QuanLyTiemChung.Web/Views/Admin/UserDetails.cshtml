@@ -1,0 +1,103 @@
+@model QuanLyTiemChung.Web.Models.User
+@{
+    ViewData["Title"] = "Chi Tiết Người Dùng";
+    // Hàm trợ giúp để gán màu sắc cho trạng thái
+    Func<string, string> GetStatusBadgeClass = (status) =>
+    {
+        return status switch
+        {
+            "Confirmed" => "badge bg-success",
+            "Completed" => "badge bg-primary",
+            "Pending" => "badge bg-warning text-dark",
+            "Cancelled" => "badge bg-danger",
+            _ => "badge bg-secondary"
+        };
+    };
+}
+
+<h3 class="mb-3">@ViewData["Title"]: @Model.FullName</h3>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Thông tin cá nhân</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Họ và tên</dt>
+                    <dd class="col-sm-8">@Model.FullName</dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4">Số điện thoại</dt>
+                    <dd class="col-sm-8">@(Model.PhoneNumber ?? "Chưa cập nhật")</dd>
+
+                    <dt class="col-sm-4">Ngày sinh</dt>
+                    <dd class="col-sm-8">@Model.DateOfBirth.ToString("dd/MM/yyyy")</dd>
+
+                    <dt class="col-sm-4">Địa chỉ</dt>
+                    <dd class="col-sm-8">@(Model.Address ?? "Chưa cập nhật")</dd>
+
+                    <dt class="col-sm-4">Vai trò</dt>
+                    <dd class="col-sm-8">
+                        @foreach (var userRole in Model.UserRoles)
+                        {
+                            var badgeClass = userRole.Role.Name switch {
+                                "Admin" => "bg-danger",
+                                "HealthOfficial" => "bg-success",
+                                "Citizen" => "bg-primary",
+                                _ => "bg-secondary"
+                            };
+                            <span class="badge @badgeClass">@userRole.Role.Name</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Lịch sử Lịch hẹn</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Appointments.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Vắc-xin</th>
+                                    <th>Ngày hẹn</th>
+                                    <th class="text-center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var appt in Model.Appointments.OrderByDescending(a => a.ScheduledDateTime))
+                                {
+                                    <tr>
+                                        <td>@(appt.Vaccine?.TradeName ?? "N/A")</td>
+                                        <td>@appt.ScheduledDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-center">
+                                            <span class="@GetStatusBadgeClass(appt.Status)">@appt.Status</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center p-3">Người dùng này chưa có lịch hẹn nào.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="ManageUsers" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

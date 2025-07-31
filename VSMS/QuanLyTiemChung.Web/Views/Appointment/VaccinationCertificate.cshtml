@@ -1,0 +1,60 @@
+@model QuanLyTiemChung.Web.Models.VaccinationRecord
+@{
+    ViewData["Title"] = "Chứng Nhận Tiêm Chủng";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0">CHỨNG NHẬN TIÊM CHỦNG VẮC-XIN</h2>
+                    <h5 class="fw-light">VACCINATION CERTIFICATE</h5>
+                </div>
+                <div class="card-body p-4">
+                    <h4 class="mb-3">Thông tin người được tiêm</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4">Họ và tên</dt>
+                        <dd class="col-sm-8">@Model.Appointment.User.FullName.ToUpper()</dd>
+
+                        <dt class="col-sm-4">Ngày sinh</dt>
+                        <dd class="col-sm-8">@Model.Appointment.User.DateOfBirth.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+
+                    <hr />
+
+                    <h4 class="mb-3">Thông tin tiêm chủng</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4">Tên vắc-xin</dt>
+                        <dd class="col-sm-8 fw-bold text-success">@Model.Appointment.Vaccine.TradeName</dd>
+
+                        <dt class="col-sm-4">Phòng bệnh</dt>
+                        <dd class="col-sm-8">@Model.Appointment.Vaccine.GenericName</dd>
+
+                        <dt class="col-sm-4">Mũi số</dt>
+                        <dd class="col-sm-8">@Model.Appointment.DoseNumber</dd>
+
+                        <dt class="col-sm-4">Ngày tiêm</dt>
+                        <dd class="col-sm-8">@Model.ActualVaccinationTime.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-4">Địa điểm tiêm</dt>
+                        <dd class="col-sm-8">@Model.Appointment.VaccinationSite.Name</dd>
+                        
+                        <dt class="col-sm-4">Cán bộ xác nhận</dt>
+                        <dd class="col-sm-8">@Model.HealthOfficial.FullName</dd>
+                    </dl>
+                    
+                    <div class="text-center mt-4 text-muted">
+                        <small>Chứng nhận được cấp bởi Hệ Thống Quản Lý Tiêm Chủng.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                <button onclick="window.print()" class="btn btn-primary">
+                    <i class="fas fa-print me-2"></i>In Chứng Nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

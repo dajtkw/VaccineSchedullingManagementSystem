@@ -1,0 +1,79 @@
+@model QuanLyTiemChung.Web.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Bảng Điều Khiển Quản Trị";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Tổng quan về hoạt động của hệ thống.</p>
+<hr />
+
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Người Dùng</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                 <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Lịch Hẹn</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalAppointments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                 <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Vắc-xin</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalVaccines</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                 <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Điểm Tiêm</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalVaccinationSites</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Các chức năng quản lý</h6>
+            </div>
+            <div class="card-body">
+                <p>Truy cập nhanh các trang quản lý chính của hệ thống.</p>
+                <a asp-action="ManageUsers" class="btn btn-secondary mb-2">Quản Lý Người Dùng</a>
+                <a asp-action="ManageAppointments" class="btn btn-secondary mb-2">Quản Lý Lịch Hẹn</a>
+                <a asp-action="ManageVaccines" class="btn btn-secondary mb-2">Quản Lý Vắc-xin</a>
+                <a asp-action="ManageSites" class="btn btn-secondary mb-2">Quản Lý Điểm Tiêm</a>
+            </div>
+        </div>
+    </div>
+</div>

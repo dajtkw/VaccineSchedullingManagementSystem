@@ -1,0 +1,177 @@
+@model QuanLyTiemChung.Web.ViewModels.CreateAppointmentViewModel
+@{
+    ViewData["Title"] = "Đăng ký tiêm chủng";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4">
+                <h2>@ViewData["Title"]</h2>
+                <p class="text-muted">Vui lòng điền đầy đủ thông tin để hoàn tất đăng ký.</p>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <h5 class="mb-3 border-bottom pb-2">1. Thông tin vắc-xin</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <label asp-for="SelectedVaccineId" class="form-label">Chọn loại vắc-xin</label>
+                                <select asp-for="SelectedVaccineId" class="form-select">
+                                    <option value="">-- Vui lòng chọn --</option>
+                                    @foreach (var group in Model.AvailableVaccines.GroupBy(v => v.VaccineCategory))
+                                    {
+                                        <optgroup label="@(group.Key?.Name ?? "Chưa phân loại")">
+                                            @foreach (var vaccine in group)
+                                            {
+                                                <option value="@vaccine.Id">@vaccine.GenericName (@vaccine.TradeName)</option>
+                                            }
+                                        </optgroup>
+                                    }
+                                </select>
+                                <span asp-validation-for="SelectedVaccineId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="DoseNumber" class="form-label">Mũi tiêm thứ</label>
+                                <input asp-for="DoseNumber" class="form-control" type="number" min="1" placeholder="Ví dụ: 1"/>
+                                <span asp-validation-for="DoseNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <h5 class="mb-3 border-bottom pb-2">2. Địa điểm và thời gian</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tỉnh/Thành phố</label>
+                                <select id="provinceSelect" class="form-select" asp-items="Model.AvailableProvinces">
+                                    <option value="">-- Vui lòng chọn --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Quận/Huyện</label>
+                                <select id="districtSelect" class="form-select" disabled>
+                                    <option value="">-- Chọn Tỉnh/Thành phố trước --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phường/Xã</label>
+                                <select id="wardSelect" class="form-select" disabled>
+                                    <option value="">-- Chọn Quận/Huyện trước --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SelectedSiteId" class="form-label"></label>
+                                <select asp-for="SelectedSiteId" id="siteSelect" class="form-select" disabled>
+                                    <option value="">-- Chọn Phường/Xã trước --</option>
+                                </select>
+                                <span asp-validation-for="SelectedSiteId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label asp-for="ScheduledDateTime" class="form-label">Chọn ngày giờ hẹn</label>
+                                <input asp-for="ScheduledDateTime" class="form-control" type="datetime-local" />
+                                <span asp-validation-for="ScheduledDateTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <h5 class="mb-3 border-bottom pb-2">3. Ghi chú</h5>
+                         <div class="mb-4">
+                            <label asp-for="Notes" class="form-label">Ghi chú thêm (nếu có)</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Thông tin về tình trạng sức khỏe, dị ứng hoặc yêu cầu đặc biệt..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 pt-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Xác nhận Đăng ký</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Quay lại danh sách</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const provinceSelect = $('#provinceSelect');
+            const districtSelect = $('#districtSelect');
+            const wardSelect = $('#wardSelect');
+            const siteSelect = $('#siteSelect');
+
+            function resetDropdown(dropdown, defaultText) {
+                dropdown.empty().append(`<option value="">${defaultText}</option>`).prop('disabled', true);
+            }
+
+            provinceSelect.on('change', function () {
+                const provinceName = $(this).val();
+                resetDropdown(districtSelect, '-- Vui lòng chọn --');
+                resetDropdown(wardSelect, '-- Chọn Quận/Huyện trước --');
+                resetDropdown(siteSelect, '-- Chọn Phường/Xã trước --');
+
+                if (provinceName) {
+                    $.getJSON(`/Appointment/GetDistricts?provinceName=${encodeURIComponent(provinceName)}`, function (data) {
+                        if(data && data.length > 0) {
+                            districtSelect.prop('disabled', false);
+                            $.each(data, function (index, item) {
+                                districtSelect.append($('<option>', {
+                                    value: item,
+                                    text: item
+                                }));
+                            });
+                        }
+                    });
+                }
+            });
+
+            districtSelect.on('change', function () {
+                const provinceName = provinceSelect.val();
+                const districtName = $(this).val();
+                resetDropdown(wardSelect, '-- Vui lòng chọn --');
+                resetDropdown(siteSelect, '-- Chọn Phường/Xã trước --');
+
+                if (districtName) {
+                    $.getJSON(`/Appointment/GetWards?provinceName=${encodeURIComponent(provinceName)}&districtName=${encodeURIComponent(districtName)}`, function (data) {
+                         if(data && data.length > 0) {
+                            wardSelect.prop('disabled', false);
+                            $.each(data, function (index, item) {
+                                wardSelect.append($('<option>', {
+                                    value: item,
+                                    text: item
+                                }));
+                            });
+                        }
+                    });
+                }
+            });
+
+             wardSelect.on('change', function () {
+                const provinceName = provinceSelect.val();
+                const districtName = districtSelect.val();
+                const wardName = $(this).val();
+                resetDropdown(siteSelect, '-- Vui lòng chọn --');
+
+                if (wardName) {
+                    $.getJSON(`/Appointment/GetSites?provinceName=${encodeURIComponent(provinceName)}&districtName=${encodeURIComponent(districtName)}&wardName=${encodeURIComponent(wardName)}`, function (data) {
+                        if(data && data.length > 0) {
+                            siteSelect.prop('disabled', false);
+                             $.each(data, function (index, item) {
+                                siteSelect.append($('<option>', {
+                                    value: item.value,
+                                    text: item.text
+                                }));
+                            });
+                        } else {
+                             resetDropdown(siteSelect, '-- Không có điểm tiêm nào --');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,84 @@
+@model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
+@{
+    ViewData["Title"] = "Quản Lý Lịch Hẹn";
+
+    // Hàm trợ giúp để gán màu sắc cho trạng thái
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Confirmed" => "badge bg-success",
+            "Completed" => "badge bg-primary",
+            "Pending" => "badge bg-warning text-dark",
+            "Cancelled" => "badge bg-danger",
+            _ => "badge bg-secondary"
+        };
+    }
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">@ViewData["Title"]</h2>
+        <a asp-action="Create" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus-circle me-2"></i>Đăng Ký Lịch Tiêm Mới
+        </a>
+    </div>
+
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Loại Vắc-xin</th>
+                                <th>Địa Điểm Tiêm</th>
+                                <th>Ngày Hẹn</th>
+                                <th class="text-center">Mũi Thứ</th>
+                                <th class="text-center">Trạng Thái</th>
+                                <th>Ngày Đăng Ký</th>
+                                <th class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><strong>@item.VaccineName</strong></td>
+                                    <td>
+                                        @item.SiteName
+                                        <div class="text-muted small">@item.SiteAddress</div>
+                                    </td>
+                                    <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy, HH:mm")</td>
+                                    <td class="text-center">@item.DoseNumber</td>
+                                    <td class="text-center">
+                                        <span class="@GetStatusBadgeClass(item.Status)">
+                                            @item.Status
+                                        </span>
+                                    </td>
+                                    <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">
+                                        @if (item.Status == "Completed")
+                                        {
+                                            <a asp-action="VaccinationCertificate" asp-route-appointmentId="@item.Id" class="btn btn-sm btn-info">Xem chứng nhận</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-4">
+                    <p class="lead">Bạn chưa có lịch hẹn nào.</p>
+                    <p>Hãy bắt đầu đăng ký mũi tiêm để bảo vệ sức khỏe của bạn và cộng đồng.</p>
+                    <a asp-action="Create" class="btn btn-lg btn-success mt-3">Đăng Ký Ngay</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

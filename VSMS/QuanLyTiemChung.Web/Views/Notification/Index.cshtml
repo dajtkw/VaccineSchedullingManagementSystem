@@ -1,0 +1,27 @@
+@model IEnumerable<QuanLyTiemChung.Web.Models.Notification>
+@{
+    ViewData["Title"] = "Tất Cả Thông Báo";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<div class="list-group">
+    @if (Model.Any())
+    {
+        @foreach (var notification in Model)
+        {
+            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="mb-1">@notification.Message</p>
+                    <small class="text-muted">@notification.CreatedAt.ToString("HH:mm dd/MM/yyyy")</small>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="list-group-item">
+            <p class="mb-0 text-muted">Bạn chưa có thông báo nào.</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,76 @@
+﻿@* Controller cần truyền một Model kiểu IEnumerable<AppointmentViewModel> vào View này *@
+@model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
+
+@{
+    ViewData["Title"] = "Trang Chủ";
+}
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <div class="text-center">
+        <h1 class="display-4">Chào mừng, @User.Identity.Name!</h1>
+        <p>Quản lý lịch tiêm chủng của bạn và gia đình một cách dễ dàng.</p>
+        <a class="btn btn-success btn-lg my-3" href="#">📅 Đăng Ký Lịch Tiêm Mới</a>
+    </div>
+
+    <hr/>
+
+    <h4>Lịch Hẹn Sắp Tới & Lịch Sử Tiêm Chủng</h4>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Vắc-xin</th>
+                    <th>Địa điểm tiêm</th>
+                    <th>Thời gian</th>
+                    <th>Mũi thứ</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.VaccineName</td>
+                        <td>@item.SiteName</td>
+                        <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.DoseNumber</td>
+                        <td>
+                            @* Dùng màu sắc để thể hiện trạng thái *@
+                            @if (item.Status == "Đã xác nhận") {
+                                <span class="badge bg-success">@item.Status</span>
+                            } else if (item.Status == "Chờ xác nhận") {
+                                <span class="badge bg-warning text-dark">@item.Status</span>
+                            } else if (item.Status == "Đã hủy") {
+                                <span class="badge bg-danger">@item.Status</span>
+                            } else if (item.Status == "Đã tiêm") {
+                                <span class="badge bg-primary">@item.Status</span>
+                            } else {
+                                <span class="badge bg-secondary">@item.Status</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Bạn chưa có lịch hẹn nào. Hãy bắt đầu bằng cách <a href="#">đăng ký một lịch tiêm mới</a>!
+        </div>
+    }
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Hệ Thống Đăng Ký Tiêm Chủng</h1>
+        <p class="lead">Đăng ký và quản lý lịch tiêm chủng của bạn trực tuyến.</p>
+        <p>
+            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
+            <a class="btn btn-secondary" asp-controller="Account" asp-action="Register">Tạo Tài Khoản</a>
+        </p>
+    </div>
+}
