@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyTiemChung.Web.Interfaces;
 using QuanLyTiemChung.Web.Models;
-using System;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using QuanLyTiemChung.Web.Hubs;
@@ -24,8 +23,7 @@ namespace QuanLyTiemChung.Web.Controllers
             IVaccinationRecordRepository recordRepository,
             UserManager<User> userManager,
             INotificationRepository notificationRepository,
-            IHubContext<NotificationHub> hubContext
-            )
+            IHubContext<NotificationHub> hubContext)
         {
             _appointmentRepository = appointmentRepository;
             _recordRepository = recordRepository;
@@ -34,29 +32,21 @@ namespace QuanLyTiemChung.Web.Controllers
             _hubContext = hubContext;
         }
 
-        // GET: /MedicalStaff
-        // Dashboard cho cán bộ y tế, hiển thị các lịch hẹn cần xử lý.
         public async Task<IActionResult> Index()
         {
-            // Lấy tất cả các lịch hẹn để hiển thị trên dashboard
             var appointments = await _appointmentRepository.GetViewModelsAsync();
             return View(appointments);
         }
 
-        // POST: /MedicalStaff/ConfirmAppointment/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmAppointment(int id)
         {
             var appointment = await _appointmentRepository.GetByIdAsync(id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
+            if (appointment == null) return NotFound();
 
             appointment.Status = "Confirmed";
             await _appointmentRepository.UpdateAsync(appointment);
-
 
             var notification = new Notification
             {
@@ -65,24 +55,29 @@ namespace QuanLyTiemChung.Web.Controllers
                 NotificationType = "AppointmentConfirmed"
             };
             await _notificationRepository.AddAsync(notification);
+            
+            // Gửi thông báo toast
             await _hubContext.Clients.User(appointment.UserId.ToString())
-            .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o"));
+                .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o"));
+            
+            // Gửi tín hiệu cập nhật UI
+            await _hubContext.Clients.User(appointment.UserId.ToString())
+                .SendAsync("UpdateAppointmentStatus", appointment.Id, "Confirmed", "badge bg-success");
 
             TempData["StatusMessage"] = "Đã xác nhận lịch hẹn thành công.";
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /MedicalStaff/CancelAppointment/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelAppointment(int id)
         {
             var appointment = await _appointmentRepository.GetByIdAsync(id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
+            if (appointment == null) return NotFound();
 
+            appointment.Status = "Cancelled";
+            await _appointmentRepository.UpdateAsync(appointment);
+            
             var notification = new Notification
             {
                 UserId = appointment.UserId,
@@ -90,32 +85,28 @@ namespace QuanLyTiemChung.Web.Controllers
                 NotificationType = "AppointmentCancelled"
             };
             await _notificationRepository.AddAsync(notification);
-            appointment.Status = "Cancelled";
-            await _appointmentRepository.UpdateAsync(appointment);
 
+            // Gửi thông báo toast
             await _hubContext.Clients.User(appointment.UserId.ToString())
                 .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o"));
+
+            // CẬP NHẬT: Thêm tín hiệu cập nhật UI cho hành động Hủy
+            await _hubContext.Clients.User(appointment.UserId.ToString())
+                .SendAsync("UpdateAppointmentStatus", appointment.Id, "Cancelled", "badge bg-danger");
 
             TempData["StatusMessage"] = "Đã hủy lịch hẹn.";
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /MedicalStaff/CompleteVaccination/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CompleteVaccination(int id)
         {
             var appointment = await _appointmentRepository.GetByIdAsync(id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
+            if (appointment == null) return NotFound();
 
             var medicalStaff = await _userManager.GetUserAsync(User);
-            if (medicalStaff == null)
-            {
-                return Challenge();
-            }
+            if (medicalStaff == null) return Challenge();
 
             appointment.Status = "Completed";
             await _appointmentRepository.UpdateAsync(appointment);
@@ -124,7 +115,7 @@ namespace QuanLyTiemChung.Web.Controllers
             {
                 AppointmentId = appointment.Id,
                 HealthOfficialId = medicalStaff.Id,
-                ActualVaccinationTime = DateTime.Now, 
+                ActualVaccinationTime = System.DateTime.Now, 
                 NotesAfterShot = $"Hoàn thành qua lịch hẹn #{appointment.Id}"
             };
             await _recordRepository.AddAsync(record);
@@ -137,8 +128,13 @@ namespace QuanLyTiemChung.Web.Controllers
             };
             await _notificationRepository.AddAsync(notification);
 
+            // Gửi thông báo toast
             await _hubContext.Clients.User(appointment.UserId.ToString())
-                    .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o"));
+                .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o"));
+
+            // CẬP NHẬT: Thêm tín hiệu cập nhật UI cho hành động Hoàn thành
+            await _hubContext.Clients.User(appointment.UserId.ToString())
+                .SendAsync("UpdateAppointmentStatus", appointment.Id, "Completed", "badge bg-primary");
 
             TempData["StatusMessage"] = "Đã ghi nhận tiêm chủng thành công.";
             return RedirectToAction(nameof(Index));

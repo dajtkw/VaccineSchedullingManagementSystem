@@ -55,10 +55,10 @@ namespace QuanLyTiemChung.Web.Repositories
 
             return await _context.Appointments
                 .Include(a => a.Vaccine)
-                // Chỉ lấy các lịch hẹn đã được xác nhận (Confirmed)
-                .Where(a => a.Status == "Confirmed")
-                // Lịch hẹn nằm trong khoảng thời gian nhắc nhở
-                .Where(a => a.ScheduledDateTime > now && a.ScheduledDateTime <= reminderTime)
+                .Where(a => a.Status == "Confirmed")        
+                .Where(a => a.IsReminderSent == false)        
+                .Where(a => a.ScheduledDateTime > now)          
+                .Where(a => a.ScheduledDateTime <= reminderTime) 
                 .ToListAsync();
         }
 

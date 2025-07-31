@@ -28,8 +28,8 @@ namespace QuanLyTiemChung.Web.Services
         {
             _logger.LogInformation("Appointment Reminder Service is starting.");
 
-            // Hẹn giờ để chạy công việc mỗi giờ một lần
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            // Chạy lần đầu sau 1 phút, sau đó lặp lại mỗi 24 giờ.
+            _timer = new Timer(DoWork, null, TimeSpan.FromMinutes(1), TimeSpan.FromHours(24));
 
             return Task.CompletedTask;
         }
@@ -37,17 +37,13 @@ namespace QuanLyTiemChung.Web.Services
         private void DoWork(object? state)
         {
             _logger.LogInformation("Appointment Reminder Service is working.");
-
-            // Vì Hosted Service là Singleton, chúng ta cần tạo một "scope" mới
-            // để lấy các dịch vụ có vòng đời "scoped" như DbContext và repositories.
             using (var scope = _services.CreateScope())
             {
                 var appointmentRepository = scope.ServiceProvider.GetRequiredService<IAppointmentRepository>();
                 var notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository>();
                 var hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<NotificationHub>>();
 
-                // Lấy các lịch hẹn sẽ diễn ra trong vòng 24 giờ tới và chưa được nhắc
-                // Giả sử chúng ta chỉ nhắc 1 lần
+                // Lấy các lịch hẹn hợp lệ để nhắc
                 var upcomingAppointments = appointmentRepository.GetUpcomingAppointments(24).Result;
 
                 foreach (var appointment in upcomingAppointments)
@@ -63,12 +59,17 @@ namespace QuanLyTiemChung.Web.Services
 
                     // Lưu thông báo vào DB
                     notificationRepository.AddAsync(notification).Wait();
-                    
+
                     // Đẩy thông báo real-time đến client
                     hubContext.Clients.User(appointment.UserId.ToString())
                         .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o")).Wait();
+                    // Đánh dấu là đã gửi thông báo và cập nhật vào CSDL
+                    appointment.IsReminderSent = true;
+                    appointmentRepository.UpdateAsync(appointment).Wait();
                 }
             }
+          _logger.LogInformation("Appointment Reminder Service has finished its work.");
+
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
