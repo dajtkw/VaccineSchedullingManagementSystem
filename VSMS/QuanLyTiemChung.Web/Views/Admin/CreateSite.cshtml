@@ -1,0 +1,161 @@
+@model QuanLyTiemChung.Web.Models.VaccinationSite
+@{
+    ViewData["Title"] = "Thêm Điểm Tiêm Mới";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Điền thông tin chi tiết cho một cơ sở tiêm chủng mới.</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="CreateSite">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label fw-bold"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+
+            <!-- Address Dropdowns -->
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold">Tỉnh/Thành phố</label>
+                    <select name="province_code" id="province" class="form-select" required>
+                        <option value="" selected>-- Đang tải... --</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold">Quận/Huyện</label>
+                    <select name="district_code" id="district" class="form-select" required disabled>
+                        <option value="" selected>-- Vui lòng chọn --</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold">Phường/Xã</label>
+                    <select name="ward_code" id="ward" class="form-select" required disabled>
+                        <option value="" selected>-- Vui lòng chọn --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Số nhà, Tên đường</label>
+                <input type="text" name="street" id="street" class="form-control" placeholder="Ví dụ: 123 Nguyễn Huệ" required />
+            </div>
+            <!-- End Address Dropdowns -->
+
+            <div class="mb-3">
+                <label asp-for="OperatingHours" class="form-label fw-bold"></label>
+                <input asp-for="OperatingHours" class="form-control" placeholder="Ví dụ: 08:00 - 17:00, Thứ 2 - Thứ 6"/>
+            </div>
+
+            <input type="hidden" asp-for="Address" />
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Tạo mới</button>
+                <a asp-action="ManageSites" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "https://provinces.open-api.vn/api/";
+
+            const provinceSelect = $("#province");
+            const districtSelect = $("#district");
+            const wardSelect = $("#ward");
+            const streetInput = $("#street");
+            const fullAddressInput = $("#Address");
+
+            // Lấy lại các giá trị đã chọn nếu có lỗi validation
+            const selectedProvinceCode = "@ViewData["SelectedProvinceCode"]";
+            const selectedDistrictCode = "@ViewData["SelectedDistrictCode"]";
+            const selectedWardCode = "@ViewData["SelectedWardCode"]";
+            const enteredStreet = "@ViewData["EnteredStreet"]";
+
+            function updateFullAddress() {
+                const provinceText = provinceSelect.find("option:selected").text();
+                const districtText = districtSelect.find("option:selected").text();
+                const wardText = wardSelect.find("option:selected").text();
+                const streetText = streetInput.val().trim();
+
+                if (provinceSelect.val() && districtSelect.val() && wardSelect.val() && streetText) {
+                    const fullAddress = `${streetText}, ${wardText}, ${districtText}, ${provinceText}`;
+                    fullAddressInput.val(fullAddress);
+                } else {
+                    fullAddressInput.val("");
+                }
+            }
+            
+            async function initializeProvinces() {
+                const response = await fetch(apiBaseUrl + "p/");
+                const provinces = await response.json();
+                provinceSelect.html('<option value="" selected>-- Vui lòng chọn --</option>');
+                provinces.forEach(p => provinceSelect.append(`<option value="${p.code}">${p.name}</option>`));
+
+                // Nếu có tỉnh đã chọn trước đó, khôi phục lại
+                if (selectedProvinceCode) {
+                    provinceSelect.val(selectedProvinceCode);
+                    await initializeDistricts(selectedProvinceCode);
+                }
+            }
+
+            async function initializeDistricts(provinceCode) {
+                if (!provinceCode) return;
+                const response = await fetch(`${apiBaseUrl}p/${provinceCode}?depth=2`);
+                const data = await response.json();
+                districtSelect.html('<option value="" selected>-- Vui lòng chọn --</option>').prop('disabled', false);
+                data.districts.forEach(d => districtSelect.append(`<option value="${d.code}">${d.name}</option>`));
+
+                // Nếu có huyện đã chọn trước đó, khôi phục lại
+                if (selectedDistrictCode) {
+                    districtSelect.val(selectedDistrictCode);
+                    await initializeWards(selectedDistrictCode);
+                }
+            }
+
+            async function initializeWards(districtCode) {
+                if (!districtCode) return;
+                const response = await fetch(`${apiBaseUrl}d/${districtCode}?depth=2`);
+                const data = await response.json();
+                wardSelect.html('<option value="" selected>-- Vui lòng chọn --</option>').prop('disabled', false);
+                data.wards.forEach(w => wardSelect.append(`<option value="${w.code}">${w.name}</option>`));
+
+                // Nếu có xã đã chọn trước đó, khôi phục lại
+                if (selectedWardCode) {
+                    wardSelect.val(selectedWardCode);
+                }
+            }
+
+            // Khôi phục lại tên đường nếu có
+            if(enteredStreet) {
+                streetInput.val(enteredStreet);
+            }
+
+            provinceSelect.on("change", async function () {
+                districtSelect.html('<option value="" selected>-- Vui lòng chọn --</option>').prop('disabled', true);
+                wardSelect.html('<option value="" selected>-- Vui lòng chọn --</option>').prop('disabled', true);
+                await initializeDistricts($(this).val());
+                updateFullAddress();
+            });
+
+            districtSelect.on("change", async function () {
+                wardSelect.html('<option value="" selected>-- Vui lòng chọn --</option>').prop('disabled', true);
+                await initializeWards($(this).val());
+                updateFullAddress();
+            });
+
+            wardSelect.on("change", updateFullAddress);
+            streetInput.on("input", updateFullAddress);
+            
+            // Bắt đầu tải danh sách tỉnh/thành phố
+            initializeProvinces();
+        });
+    </script>
+}

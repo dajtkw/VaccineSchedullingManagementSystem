@@ -1,0 +1,65 @@
+@model QuanLyTiemChung.Web.Models.Vaccine
+@{
+    ViewData["Title"] = "Chi Tiết Vắc-xin";
+}
+
+<h3 class="mb-3">@ViewData["Title"]: @Model.TradeName</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Thông tin chung</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-5">Tên thương mại</dt>
+                    <dd class="col-sm-7">@Model.TradeName</dd>
+
+                    <dt class="col-sm-5">Tên chung / Bệnh</dt>
+                    <dd class="col-sm-7">@Model.GenericName</dd>
+
+                    <dt class="col-sm-5">Danh mục</dt>
+                    <dd class="col-sm-7">@(Model.VaccineCategory?.Name ?? "Chưa phân loại")</dd>
+
+                    <dt class="col-sm-5">Nhà sản xuất</dt>
+                    <dd class="col-sm-7">@(Model.Manufacturer ?? "Chưa cập nhật")</dd>
+
+                    <dt class="col-sm-5">Mô tả</dt>
+                    <dd class="col-sm-7">@(Model.Description ?? "Chưa có mô tả")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Các liều tiêm được cấu hình</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Doses.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var dose in Model.Doses.OrderBy(d => d.DoseNumber))
+                        {
+                            <li class="list-group-item">
+                                <h6 class="fw-bold">Liều số @dose.DoseNumber</h6>
+                                <div><strong>Tuổi khuyến nghị:</strong> @(dose.RecommendedAge ?? "Không có")</div>
+                                <div><strong>Khoảng cách từ mũi trước:</strong> @(dose.IntervalFromPreviousDoseInDays?.ToString() ?? "N/A") ngày</div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted text-center p-3">Vắc-xin này chưa được cấu hình liều tiêm.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="ManageVaccines" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

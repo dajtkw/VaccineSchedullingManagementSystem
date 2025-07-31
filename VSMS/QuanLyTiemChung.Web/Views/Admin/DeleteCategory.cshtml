@@ -1,0 +1,22 @@
+@model QuanLyTiemChung.Web.Models.VaccineCategory
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Danh Mục";
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+<h3>Bạn có chắc chắn muốn xóa danh mục này không?</h3>
+<p class="text-danger">Lưu ý: Bạn không thể xóa danh mục nếu vẫn còn vắc-xin thuộc về nó.</p>
+<hr />
+<div>
+    <h4>Thông tin Danh mục</h4>
+    <dl class="row">
+        <dt class = "col-sm-3">Tên Danh mục</dt>
+        <dd class = "col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+    </dl>
+    
+    <form asp-action="DeleteCategory">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="ManageCategories" class="btn btn-secondary">Hủy bỏ</a>
+    </form>
+</div>

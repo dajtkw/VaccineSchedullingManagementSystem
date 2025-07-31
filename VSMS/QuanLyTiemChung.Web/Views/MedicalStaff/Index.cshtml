@@ -1,0 +1,105 @@
+@model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
+@{
+    ViewData["Title"] = "Bảng Điều Khiển Nhân Viên Y Tế";
+
+    // Hàm trợ giúp để gán màu sắc cho trạng thái
+    Func<string, string> GetStatusBadgeClass = (status) =>
+    {
+        return status switch
+        {
+            "Confirmed" => "badge bg-success",
+            "Completed" => "badge bg-primary",
+            "Pending" => "badge bg-warning text-dark",
+            "Cancelled" => "badge bg-danger",
+            _ => "badge bg-secondary"
+        };
+    };
+}
+
+<div class="container mt-4">
+    <h3 class="mb-4">@ViewData["Title"]</h3>
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Danh sách lịch hẹn cần xử lý</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tên Vắc-xin</th>
+                                <th>Địa Điểm Tiêm</th>
+                                <th>Ngày Hẹn</th>
+                                <th>Mũi Thứ</th>
+                                <th class="text-center">Trạng Thái</th>
+                                <th class="text-center" style="width: 220px;">Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.VaccineName</td>
+                                    <td>
+                                        <strong>@item.SiteName</strong><br />
+                                        <small class="text-muted">@item.SiteAddress</small>
+                                    </td>
+                                    <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@item.DoseNumber</td>
+                                    <td class="text-center">
+                                        <span class="@GetStatusBadgeClass(item.Status)">
+                                            @item.Status
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <form asp-action="ConfirmAppointment" asp-route-id="@item.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
+                                                </form>
+                                                <form asp-action="CancelAppointment" asp-route-id="@item.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Hủy</button>
+                                                </form>
+                                            }
+                                            else if (item.Status == "Confirmed")
+                                            {
+                                                <form asp-action="CompleteVaccination" asp-route-id="@item.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Hoàn thành</button>
+                                                </form>
+                                                <form asp-action="CancelAppointment" asp-route-id="@item.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Hủy</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted fst-italic">Đã xử lý</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5">
+                    <p class="lead">Hiện tại không có lịch hẹn nào.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
