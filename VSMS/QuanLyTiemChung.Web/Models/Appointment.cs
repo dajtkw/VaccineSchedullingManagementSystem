@@ -10,6 +10,9 @@ public class Appointment
     public int VaccinationSiteId { get; set; }
     public DateTime ScheduledDateTime { get; set; }
     public int DoseNumber { get; set; }
+    
+    public bool IsReminderSent { get; set; } = false;
+
 
     [Required]
     [StringLength(50)]

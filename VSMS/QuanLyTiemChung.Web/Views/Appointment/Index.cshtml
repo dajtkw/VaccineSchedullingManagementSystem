@@ -24,7 +24,6 @@
         </a>
     </div>
 
-
     <div class="card shadow-sm">
         <div class="card-body">
             @if (Model.Any())
@@ -45,7 +44,8 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
+                                // THÊM ID CHO MỖI DÒNG
+                                <tr id="appointment-row-@item.Id">
                                     <td><strong>@item.VaccineName</strong></td>
                                     <td>
                                         @item.SiteName
@@ -53,13 +53,15 @@
                                     </td>
                                     <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy, HH:mm")</td>
                                     <td class="text-center">@item.DoseNumber</td>
-                                    <td class="text-center">
+                                    <!-- THÊM CLASS CHO Ô TRẠNG THÁI -->
+                                    <td class="text-center status-cell">
                                         <span class="@GetStatusBadgeClass(item.Status)">
                                             @item.Status
                                         </span>
                                     </td>
                                     <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-center">
+                                    <!-- THÊM CLASS CHO Ô HÀNH ĐỘNG -->
+                                    <td class="text-center action-cell">
                                         @if (item.Status == "Completed")
                                         {
                                             <a asp-action="VaccinationCertificate" asp-route-appointmentId="@item.Id" class="btn btn-sm btn-info">Xem chứng nhận</a>
@@ -82,3 +84,40 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <!-- THÊM MỚI: Script để xử lý cập nhật real-time -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.5/signalr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub")
+                .build();
+
+            // Lắng nghe sự kiện 'UpdateAppointmentStatus' từ server
+            connection.on("UpdateAppointmentStatus", function (appointmentId, newStatus, statusBadgeClass) {
+                // Tìm đúng dòng trong bảng để cập nhật
+                const row = $(`#appointment-row-${appointmentId}`);
+                if (row.length) {
+                    // Cập nhật ô trạng thái
+                    const statusCell = row.find('.status-cell');
+                    statusCell.html(`<span class="${statusBadgeClass}">${newStatus}</span>`);
+
+                    // Cập nhật ô hành động
+                    const actionCell = row.find('.action-cell');
+                    if (newStatus === "Completed") {
+                        const certificateUrl = `/Appointment/VaccinationCertificate?appointmentId=${appointmentId}`;
+                        actionCell.html(`<a href="${certificateUrl}" class="btn btn-sm btn-info">Xem chứng nhận</a>`);
+                    } else {
+                        actionCell.html(''); // Xóa nút "Xem chứng nhận" nếu trạng thái không còn là Completed
+                    }
+                }
+            });
+
+            // Bắt đầu kết nối
+            connection.start().catch(err => console.error(err.toString()));
+        });
+    </script>
+}
