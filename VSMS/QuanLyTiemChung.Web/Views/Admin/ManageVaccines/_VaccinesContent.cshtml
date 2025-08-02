@@ -1,0 +1,166 @@
+@model IEnumerable<QuanLyTiemChung.Web.Models.Vaccine>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <p class="text-muted">Xem và quản lý tất cả vắc-xin trong hệ thống.</p>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="openCreateVaccineModal()">
+            <i class="fas fa-plus me-2"></i>Thêm Vắc-xin
+        </button>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" id="vaccineSearchInput" class="form-control" placeholder="Tìm kiếm theo tên thương mại hoặc tên chung...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="categoryFilter" class="form-select">
+                    <option value="">Tất cả danh mục</option>
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (var category in (IEnumerable<QuanLyTiemChung.Web.Models.VaccineCategory>)ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="statusFilter" class="form-select">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Đang sử dụng</option>
+                    <option value="inactive">Ngừng sử dụng</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row" id="vaccine-list">
+                @foreach (var vaccine in Model)
+                {
+                    <div class="col-md-6 col-lg-4 vaccine-item mb-3" data-category="@vaccine.VaccineCategoryId" data-status="@(vaccine.IsActive ? "active" : "inactive")">
+                        <div class="card h-100 vaccine-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 trade-name">@vaccine.TradeName</h6>
+                                <span class="badge @(vaccine.IsActive ? "bg-success" : "bg-secondary")">
+                                    @(vaccine.IsActive ? "Đang sử dụng" : "Ngừng sử dụng")
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <small class="text-muted">Tên chung:</small>
+                                    <div class="generic-name">@vaccine.GenericName</div>
+                                </div>
+                                
+                                <div class="mb-2">
+                                    <small class="text-muted">Danh mục:</small>
+                                    <div>@(vaccine.VaccineCategory?.Name ?? "Chưa phân loại")</div>
+                                </div>
+                                
+                                <div class="mb-2">
+                                    <small class="text-muted">Nhà sản xuất:</small>
+                                    <div>@vaccine.Manufacturer</div>
+                                </div>
+                                
+                                <div class="mb-2">
+                                    <small class="text-muted">Xuất xứ:</small>
+                                    <div>@vaccine.CountryOfOrigin</div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(vaccine.Description))
+                                {
+                                    <div class="mb-2">
+                                        <small class="text-muted">Mô tả:</small>
+                                        <div class="text-truncate" title="@vaccine.Description">
+                                            @vaccine.Description
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="row text-center mt-3">
+                                    <div class="col-4">
+                                        <small class="text-muted">Liều</small>
+                                        <div class="fw-bold">@(vaccine.Doses?.Count ?? 0)</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted">Độ tuổi</small>
+                                        <div class="fw-bold">@vaccine.MinAge - @vaccine.MaxAge</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted">Giá</small>
+                                        <div class="fw-bold text-success">
+                                            @if (vaccine.Price.HasValue)
+                                            {
+                                                @vaccine.Price.Value.ToString("N0") <small>₫</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Miễn phí</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group w-100">
+                                    <!-- 🔥 SỬA: Thay data-action bằng onclick functions -->
+                                    <button class="btn btn-sm btn-outline-info" 
+                                            onclick="viewVaccineDetails(@vaccine.Id)" 
+                                            title="Xem chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" 
+                                            onclick="editVaccine(@vaccine.Id)" 
+                                            title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" 
+                                            onclick="confirmDeleteVaccine(@vaccine.Id, '@vaccine.TradeName')" 
+                                            title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-syringe fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Chưa có vắc-xin nào</h5>
+                <p class="text-muted">Nhấn "Thêm Vắc-xin" để bắt đầu.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+.vaccine-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e3e6f0;
+}
+
+.vaccine-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.text-truncate {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>

@@ -6,6 +6,9 @@ using QuanLyTiemChung.Web.Models;
 using QuanLyTiemChung.Web.Repositories;
 using QuanLyTiemChung.Web.Hubs;
 using QuanLyTiemChung.Web.Services;
+using QuanLyTiemChung;
+using QuanLyTiemChung.Web;
+using System.Security.Claims; // 🔥 THÊM DÒNG NÀY
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+// 🔥 CONFIGURE SIGNALR TO USE USER ID
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -28,8 +37,8 @@ builder.Services.AddScoped<IVaccinationSiteRepository, VaccinationSiteRepository
 builder.Services.AddScoped<IVaccinationRecordRepository, VaccinationRecordRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IVaccineCategoryRepository, VaccineCategoryRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddHostedService<AppointmentReminderService>();
-
 
 var app = builder.Build();
 
@@ -48,7 +57,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -63,9 +71,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+// app.UseMiddleware<ClaimsValidationMiddleware>(); 
 app.UseAuthorization();
 
+// 🔥 MAP SIGNALR HUBS
 app.MapHub<NotificationHub>("/notificationHub");
+app.MapHub<AdminHub>("/adminHub"); // 🔥 THÊM DÒNG NÀY
 
 app.MapControllerRoute(
     name: "default",

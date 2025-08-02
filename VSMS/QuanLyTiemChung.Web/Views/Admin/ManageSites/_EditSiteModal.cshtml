@@ -1,0 +1,51 @@
+@model QuanLyTiemChung.Web.ViewModels.EditSiteViewModel
+
+<form id="editSiteForm" data-url="@Url.Action("EditSiteApi", "Admin")" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    
+    <input type="hidden" id="provinceName" asp-for="ProvinceName" />
+    <input type="hidden" id="districtName" asp-for="DistrictName" />
+    <input type="hidden" id="wardName" asp-for="WardName" />
+
+    <div class="row">
+        <div class="col-12 mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="ProvinceName" class="form-label"></label>
+            <select id="province" class="form-select"></select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="DistrictName" class="form-label"></label>
+            <select id="district" class="form-select"></select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="WardName" class="form-label"></label>
+            <select id="ward" class="form-select"></select>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="StreetAddress" class="form-label"></label>
+            <input asp-for="StreetAddress" class="form-control" />
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="OperatingHours" class="form-label"></label>
+            <input asp-for="OperatingHours" class="form-control" />
+        </div>
+    </div>
+
+    <div class="modal-footer mt-4">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-sync-alt me-2"></i>Cập nhật
+        </button>
+    </div>
+</form>
+
+<script>
+    // Logic gọi API địa chỉ giống hệt như trong form tạo mới
+    // Nó sẽ được gọi từ admin-spa.js, nhưng chúng ta cần một hàm khởi tạo riêng
+    // để xử lý việc chọn lại giá trị cũ.
+</script>

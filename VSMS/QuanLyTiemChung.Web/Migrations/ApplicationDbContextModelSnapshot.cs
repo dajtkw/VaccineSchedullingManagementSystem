@@ -222,6 +222,32 @@ namespace QuanLyTiemChung.Web.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
+            modelBuilder.Entity("QuanLyTiemChung.Web.Models.SiteVaccineInventory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VaccinationSiteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VaccineId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VaccinationSiteId");
+
+                    b.HasIndex("VaccineId");
+
+                    b.ToTable("SiteVaccineInventories");
+                });
+
             modelBuilder.Entity("QuanLyTiemChung.Web.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -386,6 +412,15 @@ namespace QuanLyTiemChung.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Contraindications")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CountryOfOrigin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -393,8 +428,23 @@ namespace QuanLyTiemChung.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Indications")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Manufacturer")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaxAge")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinAge")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TradeName")
                         .IsRequired()
@@ -439,10 +489,18 @@ namespace QuanLyTiemChung.Web.Migrations
                     b.Property<int>("DoseNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IntervalFromPreviousDoseInDays")
+                    b.Property<int?>("IntervalInMonths")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("RecommendedAge")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -528,6 +586,25 @@ namespace QuanLyTiemChung.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("QuanLyTiemChung.Web.Models.SiteVaccineInventory", b =>
+                {
+                    b.HasOne("QuanLyTiemChung.Web.Models.VaccinationSite", "Site")
+                        .WithMany()
+                        .HasForeignKey("VaccinationSiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyTiemChung.Web.Models.Vaccine", "Vaccine")
+                        .WithMany()
+                        .HasForeignKey("VaccineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+
+                    b.Navigation("Vaccine");
                 });
 
             modelBuilder.Entity("QuanLyTiemChung.Web.Models.UserRole", b =>

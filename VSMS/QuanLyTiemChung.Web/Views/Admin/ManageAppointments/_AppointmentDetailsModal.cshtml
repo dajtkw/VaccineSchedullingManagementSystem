@@ -1,0 +1,98 @@
+@* Views/Admin/ManageAppointments/_AppointmentDetailsModal.cshtml *@
+@model QuanLyTiemChung.Web.Models.Appointment
+@{
+    // Sao chép logic lấy màu cho trạng thái từ view danh sách để đảm bảo nhất quán
+    Func<string, string> GetStatusBadgeClass = (status) =>
+    {
+        return status switch
+        {
+            "Confirmed" => "badge bg-success",
+            "Completed" => "badge bg-primary",
+            "Pending" => "badge bg-warning text-dark",
+            "Cancelled" => "badge bg-danger",
+            _ => "badge bg-secondary"
+        };
+    };
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">Không tìm thấy thông tin lịch hẹn.</div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h6 class="mb-3 text-primary"><i class="fas fa-user me-2"></i>Thông tin người đăng ký</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Họ và tên:</strong>
+                        <span>@(Model.User?.FullName ?? "Không có dữ liệu")</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Email:</strong>
+                        <span>@(Model.User?.Email ?? "Không có dữ liệu")</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Số điện thoại:</strong>
+                        <span>@(Model.User?.PhoneNumber ?? "Chưa có")</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Ngày sinh:</strong>
+                        <span>@(Model.User?.DateOfBirth.ToString("dd/MM/yyyy") ?? "Không có dữ liệu")</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <h6 class="mb-3 text-primary"><i class="fas fa-calendar-alt me-2"></i>Thông tin lịch hẹn</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Trạng thái:</strong>
+                        <span class="@GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Ngày hẹn:</strong>
+                        <strong>@Model.ScheduledDateTime.ToString("HH:mm - dd/MM/yyyy")</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Ngày đăng ký:</strong>
+                        <span>@Model.CreatedAt.ToString("HH:mm - dd/MM/yyyy")</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h6 class="mb-3 text-primary"><i class="fas fa-syringe me-2"></i>Thông tin vắc-xin & Địa điểm</h6>
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-3">Vắc-xin:</dt>
+                            <dd class="col-sm-9">@(Model.Vaccine?.TradeName ?? "Không có dữ liệu")</dd>
+
+                            <dt class="col-sm-3">Mũi thứ:</dt>
+                            <dd class="col-sm-9">@Model.DoseNumber</dd>
+
+                            <hr class="my-2">
+
+                            <dt class="col-sm-3">Địa điểm tiêm:</dt>
+                            <dd class="col-sm-9">@(Model.VaccinationSite?.Name ?? "Không có dữ liệu")</dd>
+
+                            <dt class="col-sm-3">Địa chỉ:</dt>
+                            <dd class="col-sm-9">@(Model.VaccinationSite?.Address ?? "Không có dữ liệu")</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer mt-3">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Đóng
+        </button>
+    </div>
+}

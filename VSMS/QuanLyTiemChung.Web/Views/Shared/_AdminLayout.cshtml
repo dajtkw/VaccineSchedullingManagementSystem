@@ -1,0 +1,211 @@
+@* Views/Shared/_AdminLayout.cshtml *@
+@using Microsoft.AspNetCore.Identity
+@using QuanLyTiemChung.Web.Models
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+
+    <!-- 🔥 THÊM META TAG CHO CURRENT USER ID -->
+    <meta name="current-user-id" content="@UserManager.GetUserId(User)" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin-spa.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-syringe me-2"></i>Hệ Thống Tiêm Chủng - Admin
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2"></i>@User.Identity?.Name
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/">Về trang chủ</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="dropdown-item">Đăng xuất</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 🔥 THÊM SIGNALR CHO ROLE CHANGE NOTIFICATIONS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        // SignalR connection for role change notifications
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/adminHub")
+            .build();
+
+        // Start connection
+        connection.start().then(function () {
+            console.log("SignalR connected for role change notifications");
+        }).catch(function (err) {
+            console.error("SignalR connection error: " + err.toString());
+        });
+
+        // **🔥 LẮNG NGHE THÔNG BÁO THAY ĐỔI QUYỀN**
+        connection.on("RoleChanged", function (data) {
+            console.log("Your role has been changed:", data);
+
+            // Show notification
+            showRoleChangeNotification(data);
+
+            // Auto logout after 5 seconds
+            setTimeout(() => {
+                logout();
+            }, 5000);
+        });
+
+        // **🔥 FUNCTION HIỂN THỊ THÔNG BÁO CHO USER**
+        function showRoleChangeNotification(data) {
+            const modalHtml = `
+                <div class="modal fade" id="roleChangedModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-warning">
+                            <div class="modal-header bg-warning text-dark">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Quyền Truy Cập Đã Thay Đổi
+                                </h5>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div class="mb-4">
+                                    <i class="fas fa-user-shield fa-4x text-warning mb-3"></i>
+                                </div>
+                                <h5>Thông báo quan trọng!</h5>
+                                <p class="lead">${data.message}</p>
+                                
+                                <div class="alert alert-info">
+                                    <strong>Chi tiết thay đổi:</strong><br>
+                                    Quyền cũ: <span class="badge bg-secondary">${data.oldRole}</span><br>
+                                    Quyền mới: <span class="badge bg-primary">${data.newRole}</span>
+                                </div>
+                                
+                                <div class="countdown-container">
+                                    <p>Bạn sẽ được đăng xuất sau: <strong id="countdown">5</strong> giây</p>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" 
+                                             role="progressbar" style="width: 100%" id="countdownBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-warning" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất Ngay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal
+            $('#roleChangedModal').remove();
+
+            // Add new modal
+            $('body').append(modalHtml);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('roleChangedModal'));
+            modal.show();
+
+            // Countdown timer
+            let countdown = 5;
+            const countdownElement = document.getElementById('countdown');
+            const progressBar = document.getElementById('countdownBar');
+
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                progressBar.style.width = (countdown / 5 * 100) + '%';
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    logout();
+                }
+            }, 1000);
+        }
+
+        // **🔥 FIXED LOGOUT FUNCTION - SỬ DỤNG POST REQUEST**
+        function logout() {
+            // Tạo form POST để logout đúng cách
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Account/Logout';
+
+            // Thêm CSRF token nếu có
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // **🔥 NOTIFICATION FUNCTION**
+        function showNotification(message, type = 'info', duration = 5000) {
+            const alertClass = type === 'success' ? 'alert-success' :
+                type === 'error' ? 'alert-danger' :
+                    type === 'warning' ? 'alert-warning' : 'alert-info';
+
+            const icon = type === 'success' ? 'fas fa-check-circle' :
+                type === 'error' ? 'fas fa-exclamation-circle' :
+                    type === 'warning' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
+
+            const notification = $(`
+                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                     style="top: 20px; right: 20px; z-index: 9999; min-width: 350px;">
+                    <i class="${icon} me-2"></i>${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+
+            $('body').append(notification);
+
+            setTimeout(() => {
+                notification.fadeOut(() => notification.remove());
+            }, duration);
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

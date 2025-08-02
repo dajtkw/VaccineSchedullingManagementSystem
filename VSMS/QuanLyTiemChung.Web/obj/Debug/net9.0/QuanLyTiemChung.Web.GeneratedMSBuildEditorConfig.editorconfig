@@ -52,80 +52,88 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/CreateCategory.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlQ2F0ZWdvcnkuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/CreateSite.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlU2l0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/CreateUser.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlVXNlci5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/CreateVaccine.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlVmFjY2luZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/DeleteCategory.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGVsZXRlQ2F0ZWdvcnkuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/DeleteSite.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGVsZXRlU2l0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/DeleteVaccine.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGVsZXRlVmFjY2luZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/EditCategory.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdENhdGVnb3J5LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/EditSite.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFNpdGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/EditUser.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFVzZXIuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/EditVaccine.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFZhY2NpbmUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageAppointments.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQXBwb2ludG1lbnRzLmNzaHRtbA==
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageAppointments/_AppointmentDetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQXBwb2ludG1lbnRzXF9BcHBvaW50bWVudERldGFpbHNNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageCategories.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQ2F0ZWdvcmllcy5jc2h0bWw=
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageAppointments/_AppointmentsContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQXBwb2ludG1lbnRzXF9BcHBvaW50bWVudHNDb250ZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageSites.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlU2l0ZXMuY3NodG1s
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageCategories/_CategoriesContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQ2F0ZWdvcmllc1xfQ2F0ZWdvcmllc0NvbnRlbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageUsers.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVXNlcnMuY3NodG1s
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageCategories/_CreateCategoryModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQ2F0ZWdvcmllc1xfQ3JlYXRlQ2F0ZWdvcnlNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageVaccines.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVmFjY2luZXMuY3NodG1s
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageCategories/_EditCategoryModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQ2F0ZWdvcmllc1xfRWRpdENhdGVnb3J5TW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/UserDetails.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlckRldGFpbHMuY3NodG1s
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageInventory/_InventoryManagementContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlSW52ZW50b3J5XF9JbnZlbnRvcnlNYW5hZ2VtZW50Q29udGVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/VaccineDetails.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmFjY2luZURldGFpbHMuY3NodG1s
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageInventory/_InventoryTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlSW52ZW50b3J5XF9JbnZlbnRvcnlUYWJsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageSites/_CreateSiteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlU2l0ZXNcX0NyZWF0ZVNpdGVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageSites/_EditSiteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlU2l0ZXNcX0VkaXRTaXRlTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageSites/_SiteDetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlU2l0ZXNcX1NpdGVEZXRhaWxzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageSites/_SitesContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlU2l0ZXNcX1NpdGVzQ29udGVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageUsers/_CreateUserModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVXNlcnNcX0NyZWF0ZVVzZXJNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageUsers/_EditUserModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVXNlcnNcX0VkaXRVc2VyTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageUsers/_UserDetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVXNlcnNcX1VzZXJEZXRhaWxzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageUsers/_UsersContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVXNlcnNcX1VzZXJzQ29udGVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageVaccines/_CreateVaccineModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVmFjY2luZXNcX0NyZWF0ZVZhY2NpbmVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageVaccines/_EditVaccineModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVmFjY2luZXNcX0VkaXRWYWNjaW5lTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageVaccines/_VaccineDetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVmFjY2luZXNcX1ZhY2NpbmVEZXRhaWxzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/ManageVaccines/_VaccinesContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVmFjY2luZXNcX1ZhY2NpbmVzQ29udGVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Admin/_DashboardContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cX0Rhc2hib2FyZENvbnRlbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Appointment/Create.cshtml]
@@ -138,6 +146,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Appointment/VaccinationCertificate.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcVmFjY2luYXRpb25DZXJ0aWZpY2F0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Appointment/_AppointmentList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcX0FwcG9pbnRtZW50TGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Appointment/_AppointmentListPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcX0FwcG9pbnRtZW50TGlzdFBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Home/Index.cshtml]
@@ -158,6 +174,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Shared/_AdminLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/chuacode/Computer Network Programming/VaccineSchedullingManagementSystem/VSMS/QuanLyTiemChung.Web/Views/Shared/_LoginPartial.cshtml]

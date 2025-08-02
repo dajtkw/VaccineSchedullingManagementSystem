@@ -1,0 +1,55 @@
+@model QuanLyTiemChung.Web.ViewModels.CreateSiteViewModel
+
+<form id="createSiteForm" data-url="@Url.Action("CreateSiteApi", "Admin")" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    
+    <input type="hidden" id="provinceName" asp-for="ProvinceName" />
+    <input type="hidden" id="districtName" asp-for="DistrictName" />
+    <input type="hidden" id="wardName" asp-for="WardName" />
+
+    <div class="row">
+        <div class="col-12 mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="ProvinceName" class="form-label"></label>
+            <select id="province" class="form-select">
+                <option value="" selected>Chọn Tỉnh/Thành phố</option>
+            </select>
+            <span asp-validation-for="ProvinceName" class="text-danger small"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="DistrictName" class="form-label"></label>
+            <select id="district" class="form-select">
+                <option value="" selected>Chọn Quận/Huyện</option>
+            </select>
+            <span asp-validation-for="DistrictName" class="text-danger small"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="WardName" class="form-label"></label>
+            <select id="ward" class="form-select">
+                <option value="" selected>Chọn Phường/Xã</option>
+            </select>
+            <span asp-validation-for="WardName" class="text-danger small"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="StreetAddress" class="form-label"></label>
+            <input asp-for="StreetAddress" class="form-control" placeholder="Ví dụ: 123 Đường ABC"/>
+            <span asp-validation-for="StreetAddress" class="text-danger small"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="OperatingHours" class="form-label"></label>
+            <input asp-for="OperatingHours" class="form-control" placeholder="Ví dụ: 08:00 - 17:00, Thứ 2 - Thứ 6"/>
+            <span asp-validation-for="OperatingHours" class="text-danger small"></span>
+        </div>
+    </div>
+
+    <div class="modal-footer mt-4">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Lưu điểm tiêm
+        </button>
+    </div>
+</form>

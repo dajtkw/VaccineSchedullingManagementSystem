@@ -1,19 +1,6 @@
 @model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
 @{
     ViewData["Title"] = "Quản Lý Lịch Hẹn";
-
-    // Hàm trợ giúp để gán màu sắc cho trạng thái
-    string GetStatusBadgeClass(string status)
-    {
-        return status switch
-        {
-            "Confirmed" => "badge bg-success",
-            "Completed" => "badge bg-primary",
-            "Pending" => "badge bg-warning text-dark",
-            "Cancelled" => "badge bg-danger",
-            _ => "badge bg-secondary"
-        };
-    }
 }
 
 <div class="container my-4">
@@ -25,99 +12,104 @@
     </div>
 
     <div class="card shadow-sm">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="appointment-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-status="upcoming">Lịch hẹn sắp tới</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="history">Lịch sử tiêm chủng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-status="all">Tất cả</a>
+                </li>
+            </ul>
+        </div>
         <div class="card-body">
-            @if (Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Loại Vắc-xin</th>
-                                <th>Địa Điểm Tiêm</th>
-                                <th>Ngày Hẹn</th>
-                                <th class="text-center">Mũi Thứ</th>
-                                <th class="text-center">Trạng Thái</th>
-                                <th>Ngày Đăng Ký</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                // THÊM ID CHO MỖI DÒNG
-                                <tr id="appointment-row-@item.Id">
-                                    <td><strong>@item.VaccineName</strong></td>
-                                    <td>
-                                        @item.SiteName
-                                        <div class="text-muted small">@item.SiteAddress</div>
-                                    </td>
-                                    <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy, HH:mm")</td>
-                                    <td class="text-center">@item.DoseNumber</td>
-                                    <!-- THÊM CLASS CHO Ô TRẠNG THÁI -->
-                                    <td class="text-center status-cell">
-                                        <span class="@GetStatusBadgeClass(item.Status)">
-                                            @item.Status
-                                        </span>
-                                    </td>
-                                    <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
-                                    <!-- THÊM CLASS CHO Ô HÀNH ĐỘNG -->
-                                    <td class="text-center action-cell">
-                                        @if (item.Status == "Completed")
-                                        {
-                                            <a asp-action="VaccinationCertificate" asp-route-appointmentId="@item.Id" class="btn btn-sm btn-info">Xem chứng nhận</a>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else
-            {
-                <div class="text-center p-4">
-                    <p class="lead">Bạn chưa có lịch hẹn nào.</p>
-                    <p>Hãy bắt đầu đăng ký mũi tiêm để bảo vệ sức khỏe của bạn và cộng đồng.</p>
-                    <a asp-action="Create" class="btn btn-lg btn-success mt-3">Đăng Ký Ngay</a>
-                </div>
-            }
+            <div id="appointment-list-container">
+                @* Nội dung ban đầu sẽ được tải vào đây *@
+            </div>
         </div>
     </div>
 </div>
 
+@* Thêm AntiForgeryToken để các AJAX POST (như Hủy lịch) có thể sử dụng *@
+<form id="antiForgeryForm">
+    @Html.AntiForgeryToken()
+</form>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
-    <!-- THÊM MỚI: Script để xử lý cập nhật real-time -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.5/signalr.min.js"></script>
     <script>
         $(document).ready(function () {
-            const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/notificationHub")
-                .build();
+            const container = $('#appointment-list-container');
+            let currentStatus = 'upcoming'; // Tab mặc định
 
-            // Lắng nghe sự kiện 'UpdateAppointmentStatus' từ server
-            connection.on("UpdateAppointmentStatus", function (appointmentId, newStatus, statusBadgeClass) {
-                // Tìm đúng dòng trong bảng để cập nhật
-                const row = $(`#appointment-row-${appointmentId}`);
-                if (row.length) {
-                    // Cập nhật ô trạng thái
-                    const statusCell = row.find('.status-cell');
-                    statusCell.html(`<span class="${statusBadgeClass}">${newStatus}</span>`);
+            // ======================================================
+            // LOGIC XỬ LÝ GIAO DIỆN VÀ TAB
+            // ======================================================
 
-                    // Cập nhật ô hành động
-                    const actionCell = row.find('.action-cell');
-                    if (newStatus === "Completed") {
-                        const certificateUrl = `/Appointment/VaccinationCertificate?appointmentId=${appointmentId}`;
-                        actionCell.html(`<a href="${certificateUrl}" class="btn btn-sm btn-info">Xem chứng nhận</a>`);
-                    } else {
-                        actionCell.html(''); // Xóa nút "Xem chứng nhận" nếu trạng thái không còn là Completed
-                    }
+            function loadAppointments(status) {
+                currentStatus = status;
+                container.html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải...</span></div></div>');
+                
+                $.get(`/Appointment/GetAppointmentsByStatus?status=${status}`)
+                    .done(function (data) {
+                        container.html(data);
+                    })
+                    .fail(function () {
+                        container.html('<div class="alert alert-danger">Không thể tải dữ liệu. Vui lòng thử lại.</div>');
+                    });
+            }
+
+            $('#appointment-tabs .nav-link').on('click', function(e) {
+                e.preventDefault();
+                $('#appointment-tabs .nav-link').removeClass('active');
+                $(this).addClass('active');
+                const status = $(this).data('status');
+                loadAppointments(status);
+            });
+            
+            // Tải tab mặc định khi trang được mở
+            loadAppointments('upcoming');
+
+            // Xử lý nút hủy lịch
+            $(document).on('click', '.btn-cancel-appointment', function() {
+                const btn = $(this);
+                const appointmentId = btn.data('appointment-id');
+                
+                if (confirm('Bạn có chắc chắn muốn hủy lịch hẹn này không?')) {
+                    const token = $('#antiForgeryForm input[name="__RequestVerificationToken"]').val();
+                    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+
+                    $.post('/Appointment/CancelAppointment', { id: appointmentId, __RequestVerificationToken: token })
+                        .done(function(response) {
+                            if(response.success) {
+                                alert(response.message);
+                                loadAppointments(currentStatus); // Tải lại tab hiện tại
+                            } else {
+                                alert('Lỗi: ' + response.message);
+                                btn.prop('disabled', false).html('<i class="fas fa-times"></i> Hủy');
+                            }
+                        })
+                        .fail(function() {
+                            alert('Đã xảy ra lỗi kết nối. Vui lòng thử lại.');
+                            btn.prop('disabled', false).html('<i class="fas fa-times"></i> Hủy');
+                        });
                 }
             });
 
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub") // Đảm bảo URL này chính xác
+                .build();
+
+            connection.on("UpdateAppointmentStatus", function (appointmentId, newStatus, statusBadgeClass) {
+                loadAppointments(currentStatus);
+                
+            });
+
             // Bắt đầu kết nối
-            connection.start().catch(err => console.error(err.toString()));
+            connection.start().catch(err => console.error("SignalR Connection Error: ", err.toString()));
         });
     </script>
 }

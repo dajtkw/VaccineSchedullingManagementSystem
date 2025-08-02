@@ -1,79 +1,80 @@
-@model QuanLyTiemChung.Web.ViewModels.AdminDashboardViewModel
+@* Views/Admin/Index.cshtml *@
 @{
-    ViewData["Title"] = "Bảng Điều Khiển Quản Trị";
+    ViewData["Title"] = "Quản Trị Hệ Thống";
+    Layout = "_AdminLayout";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p>Tổng quan về hoạt động của hệ thống.</p>
-<hr />
+<div class="admin-container">
+    <!-- Sidebar Navigation -->
+    <div class="admin-sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-shield-alt"></i> Admin Panel</h4>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-target="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="users">
+                        <i class="fas fa-users"></i> Quản Lý Người Dùng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="appointments">
+                        <i class="fas fa-calendar-check"></i> Quản Lý Lịch Hẹn
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="vaccines">
+                        <i class="fas fa-syringe"></i> Quản Lý Vắc-xin
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="categories">
+                        <i class="fas fa-tags"></i> Danh Mục Vắc-xin
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="sites">
+                        <i class="fas fa-map-marker-alt"></i> Điểm Tiêm Chủng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-target="inventory">
+                        <i class="fas fa-boxes"></i>
+                        <span>Quản lý Tồn kho</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
-<div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Người Dùng</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-gray-300"></i>
-                    </div>
-                </div>
+    <!-- Main Content Area -->
+    <div class="admin-content">
+        <div class="content-header">
+            <h2 id="page-title">Dashboard</h2>
+            <div class="header-actions">
+                <button class="btn btn-outline-secondary" onclick="refreshContent()">
+                    <i class="fas fa-sync-alt"></i> Làm mới
+                </button>
             </div>
         </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                 <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Lịch Hẹn</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalAppointments</div>
-                    </div>
+
+        <!-- Dynamic Content Container -->
+        <div id="main-content" class="content-body">
+            <div class="loading-spinner text-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                 <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Vắc-xin</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalVaccines</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                 <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Điểm Tiêm</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalVaccinationSites</div>
-                    </div>
-                </div>
+                <p class="mt-2">Đang tải dữ liệu...</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-6">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Các chức năng quản lý</h6>
-            </div>
-            <div class="card-body">
-                <p>Truy cập nhanh các trang quản lý chính của hệ thống.</p>
-                <a asp-action="ManageUsers" class="btn btn-secondary mb-2">Quản Lý Người Dùng</a>
-                <a asp-action="ManageAppointments" class="btn btn-secondary mb-2">Quản Lý Lịch Hẹn</a>
-                <a asp-action="ManageVaccines" class="btn btn-secondary mb-2">Quản Lý Vắc-xin</a>
-                <a asp-action="ManageSites" class="btn btn-secondary mb-2">Quản Lý Điểm Tiêm</a>
-            </div>
-        </div>
-    </div>
-</div>
+@section Scripts {
+    <script src="~/js/admin-spa.js"></script>
+}

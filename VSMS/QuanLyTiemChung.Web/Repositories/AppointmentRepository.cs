@@ -55,31 +55,41 @@ namespace QuanLyTiemChung.Web.Repositories
 
             return await _context.Appointments
                 .Include(a => a.Vaccine)
-                .Where(a => a.Status == "Confirmed")        
-                .Where(a => a.IsReminderSent == false)        
-                .Where(a => a.ScheduledDateTime > now)          
-                .Where(a => a.ScheduledDateTime <= reminderTime) 
+                .Where(a => a.Status == "Confirmed")
+                .Where(a => a.IsReminderSent == false)
+                .Where(a => a.ScheduledDateTime > now)
+                .Where(a => a.ScheduledDateTime <= reminderTime)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<AppointmentViewModel>> GetViewModelsAsync()
         {
             return await _context.Appointments
-                .Include(a => a.User) // Thêm Include để lấy thông tin người dùng
+                .AsNoTracking()
+                .Include(a => a.User)
                 .Include(a => a.Vaccine)
                 .Include(a => a.VaccinationSite)
                 .Select(a => new AppointmentViewModel
                 {
                     Id = a.Id,
-                    UserFullName = a.User != null ? a.User.FullName : "Không có dữ liệu", // Lấy FullName
-                    VaccineName = a.Vaccine != null ? a.Vaccine.TradeName : "Không có dữ liệu", // Sửa lại thành TradeName
+                    UserFullName = a.User != null ? a.User.FullName : "Không có dữ liệu",
+                    VaccineName = a.Vaccine != null ? a.Vaccine.TradeName : "Không có dữ liệu",
                     SiteName = a.VaccinationSite != null ? a.VaccinationSite.Name : "Không có dữ liệu",
                     SiteAddress = a.VaccinationSite != null ? a.VaccinationSite.Address : "Không có dữ liệu",
                     ScheduledDateTime = a.ScheduledDateTime,
                     DoseNumber = a.DoseNumber,
                     Status = a.Status,
                     Notes = a.Notes,
-                    CreatedAt = a.CreatedAt
+                    CreatedAt = a.CreatedAt,
+
+                    // Gán dữ liệu cho các thuộc tính mới
+                    VaccinationSiteName = a.VaccinationSite != null ? a.VaccinationSite.Name : "Không có dữ liệu",
+                    StatusBadgeClass =
+        a.Status == "Confirmed" ? "badge bg-success" :
+        a.Status == "Completed" ? "badge bg-primary" :
+        a.Status == "Pending" ? "badge bg-warning text-dark" :
+        a.Status == "Cancelled" ? "badge bg-danger" :
+        "badge bg-secondary"
                 })
                 .ToListAsync();
         }
@@ -87,25 +97,48 @@ namespace QuanLyTiemChung.Web.Repositories
         public async Task<IEnumerable<AppointmentViewModel>> GetViewModelsByUserIdAsync(int userId)
         {
             return await _context.Appointments
+                .AsNoTracking()
                 .Where(a => a.UserId == userId)
-                .Include(a => a.User) // Thêm Include để lấy thông tin người dùng
+                .Include(a => a.User)
                 .Include(a => a.Vaccine)
                 .Include(a => a.VaccinationSite)
                 .Select(a => new AppointmentViewModel
                 {
                     Id = a.Id,
-                    UserFullName = a.User != null ? a.User.FullName : "Không có dữ liệu", // Lấy FullName
-                    VaccineName = a.Vaccine != null ? a.Vaccine.TradeName : "Không có dữ liệu", // Sửa lại thành TradeName
+                    UserFullName = a.User != null ? a.User.FullName : "Không có dữ liệu",
+                    VaccineName = a.Vaccine != null ? a.Vaccine.TradeName : "Không có dữ liệu",
                     SiteName = a.VaccinationSite != null ? a.VaccinationSite.Name : "Không có dữ liệu",
                     SiteAddress = a.VaccinationSite != null ? a.VaccinationSite.Address : "Không có dữ liệu",
                     ScheduledDateTime = a.ScheduledDateTime,
                     DoseNumber = a.DoseNumber,
                     Status = a.Status,
                     Notes = a.Notes,
-                    CreatedAt = a.CreatedAt
+                    CreatedAt = a.CreatedAt,
+
+                    // Gán dữ liệu cho các thuộc tính mới
+                    VaccinationSiteName = a.VaccinationSite != null ? a.VaccinationSite.Name : "Không có dữ liệu",
+                    StatusBadgeClass =
+        a.Status == "Confirmed" ? "badge bg-success" :
+        a.Status == "Completed" ? "badge bg-primary" :
+        a.Status == "Pending" ? "badge bg-warning text-dark" :
+        a.Status == "Cancelled" ? "badge bg-danger" :
+        "badge bg-secondary"
                 })
                 .OrderByDescending(a => a.ScheduledDateTime)
                 .ToListAsync();
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var appointment = await _context.Appointments.FindAsync(id);
+            if (appointment == null)
+            {
+                return false;
+            }
+
+            _context.Appointments.Remove(appointment);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -30,6 +30,30 @@ namespace QuanLyTiemChung.Web.Models
         // Navigation Properties
         public virtual ICollection<VaccineDose> Doses { get; set; } = new List<VaccineDose>();
         public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        [Display(Name = "Nước sản xuất")]
+        public string? CountryOfOrigin { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Giá phải là một số không âm.")]
+        [Display(Name = "Giá (VND)")]
+        public decimal? Price { get; set; }
+
+        [Display(Name = "Độ tuổi tối thiểu (năm)")]
+        public int? MinAge { get; set; }
+
+        [Display(Name = "Độ tuổi tối đa (năm)")]
+        public int? MaxAge { get; set; }
+
+        [Display(Name = "Chỉ định")]
+        public string? Indications { get; set; }
+
+        [Display(Name = "Chống chỉ định")]
+        public string? Contraindications { get; set; }
+
+        [Display(Name = "Còn sử dụng")]
+        public bool IsActive { get; set; } = true;
+
+        [Display(Name = "Ngày tạo")]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 
 }
