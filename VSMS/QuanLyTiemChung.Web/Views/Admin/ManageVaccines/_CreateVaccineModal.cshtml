@@ -1,0 +1,253 @@
+@model QuanLyTiemChung.Web.Models.Vaccine
+
+<form id="createVaccineForm" data-url="/Admin/CreateVaccineApi">
+    @Html.AntiForgeryToken()
+    
+    <div id="validation-summary" class="alert alert-danger" style="display: none;"></div>
+
+    <ul class="nav nav-tabs" id="vaccineTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="info-tab-create" data-bs-toggle="tab" data-bs-target="#info-create" type="button" role="tab" aria-controls="info-create" aria-selected="true">Thông tin chung</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="doses-tab-create" data-bs-toggle="tab" data-bs-target="#doses-create" type="button" role="tab" aria-controls="doses-create" aria-selected="false">Quản lý liều</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="vaccineTabContentCreate">
+        <div class="tab-pane fade show active" id="info-create" role="tabpanel" aria-labelledby="info-tab-create">
+            <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="TradeName" class="form-label">
+                Tên thương mại <span class="text-danger">*</span>
+            </label>
+            <input asp-for="TradeName" class="form-control" required />
+            <div asp-validation-for="TradeName" class="invalid-feedback"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="GenericName" class="form-label">
+                Tên chung <span class="text-danger">*</span>
+            </label>
+            <input asp-for="GenericName" class="form-control" required />
+            <div asp-validation-for="GenericName" class="invalid-feedback"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="VaccineCategoryId" class="form-label">
+                Danh mục <span class="text-danger">*</span>
+            </label>
+            <select asp-for="VaccineCategoryId" class="form-select" required>
+                <option value="">-- Chọn danh mục --</option>
+                @if (ViewBag.Categories != null)
+                {
+                    @foreach (var category in (IEnumerable<QuanLyTiemChung.Web.Models.VaccineCategory>)ViewBag.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+            <div asp-validation-for="VaccineCategoryId" class="invalid-feedback"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Manufacturer" class="form-label">
+                Nhà sản xuất
+            </label>
+            <input asp-for="Manufacturer" class="form-control" />
+            <div asp-validation-for="Manufacturer" class="invalid-feedback"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="CountryOfOrigin" class="form-label">
+                Xuất xứ
+            </label>
+            <input asp-for="CountryOfOrigin" class="form-control" />
+            <div asp-validation-for="CountryOfOrigin" class="invalid-feedback"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Price" class="form-label">
+                Giá (VNĐ)
+            </label>
+            <input asp-for="Price" type="number" min="0" step="1000" class="form-control" placeholder="Để trống nếu miễn phí" />
+            <div asp-validation-for="Price" class="invalid-feedback"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="MinAge" class="form-label">
+                Độ tuổi tối thiểu (năm)
+            </label>
+            <input asp-for="MinAge" type="number" min="0" class="form-control" placeholder="Để trống nếu không giới hạn" />
+            <div asp-validation-for="MinAge" class="invalid-feedback"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="MaxAge" class="form-label">
+                Độ tuổi tối đa (năm)
+            </label>
+            <input asp-for="MaxAge" type="number" min="0" class="form-control" placeholder="Để trống nếu không giới hạn" />
+            <div asp-validation-for="MaxAge" class="invalid-feedback"></div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">
+            Mô tả chi tiết
+        </label>
+        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mô tả tác dụng, lưu ý sử dụng..."></textarea>
+        <div asp-validation-for="Description" class="invalid-feedback"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Indications" class="form-label">
+                Chỉ định sử dụng
+            </label>
+            <textarea asp-for="Indications" class="form-control" rows="2" placeholder="Phòng chống các bệnh..."></textarea>
+            <div asp-validation-for="Indications" class="invalid-feedback"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Contraindications" class="form-label">
+                Chống chỉ định
+            </label>
+            <textarea asp-for="Contraindications" class="form-control" rows="2" placeholder="Không sử dụng trong trường hợp..."></textarea>
+            <div asp-validation-for="Contraindications" class="invalid-feedback"></div>
+        </div>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" type="checkbox" class="form-check-input" checked />
+        <label asp-for="IsActive" class="form-check-label">
+            Đang sử dụng
+        </label>
+    </div>
+        </div>
+        <div class="tab-pane fade" id="doses-create" role="tabpanel" aria-labelledby="doses-tab-create">
+            <div id="doses-container-create">
+                @if (Model.Doses != null && Model.Doses.Any())
+                {
+                    int i = 0;
+                    foreach (var dose in Model.Doses)
+                    {
+                        <div class="dose-item border rounded p-3 mb-3">
+                            <input type="hidden" name="Doses.Index" value="@i" />
+                            <input type="hidden" name="Doses[@i].Id" value="@dose.Id" />
+                            <input type="hidden" name="Doses[@i].VaccineId" value="@dose.VaccineId" />
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="form-label">Mũi số</label>
+                                    <input type="number" name="Doses[@i].DoseNumber" value="@dose.DoseNumber" class="form-control" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Tuổi khuyến nghị</label>
+                                    <input type="text" name="Doses[@i].RecommendedAge" value="@dose.RecommendedAge" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Khoảng cách (tháng)</label>
+                                    <input type="number" name="Doses[@i].IntervalInMonths" value="@dose.IntervalInMonths" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-check-label">Bắt buộc</label>
+                                    <div class="form-check">
+                                        <input type="hidden" name="Doses[@i].IsRequired" value="false" />
+                                        <input type="checkbox" name="Doses[@i].IsRequired" value="true" @(dose.IsRequired ? "checked" : "") class="form-check-input" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <label class="form-label">Ghi chú</label>
+                                    <textarea name="Doses[@i].Notes" class="form-control">@dose.Notes</textarea>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger mt-2 remove-dose-create">Xóa liều</button>
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+            <button type="button" id="add-dose-create" class="btn btn-sm btn-success">Thêm liều</button>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Hủy
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Tạo mới
+        </button>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let doseIndexCreate = 0;
+
+        document.getElementById('add-dose-create').addEventListener('click', function () {
+            const container = document.getElementById('doses-container-create');
+            const newDose = document.createElement('div');
+            newDose.classList.add('dose-item', 'border', 'rounded', 'p-3', 'mb-3');
+            newDose.innerHTML = `
+                <input type="hidden" name="Doses.Index" value="${doseIndexCreate}" />
+                <input type="hidden" name="Doses[${doseIndexCreate}].Id" value="0" />
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="form-label">Mũi số</label>
+                        <input type="number" name="Doses[${doseIndexCreate}].DoseNumber" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Tuổi khuyến nghị</label>
+                        <input type="text" name="Doses[${doseIndexCreate}].RecommendedAge" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Khoảng cách (tháng)</label>
+                        <input type="number" name="Doses[${doseIndexCreate}].IntervalInMonths" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-check-label">Bắt buộc</label>
+                        <div class="form-check">
+                            <input type="hidden" name="Doses[${doseIndexCreate}].IsRequired" value="false" />
+                            <input type="checkbox" name="Doses[${doseIndexCreate}].IsRequired" value="true" checked class="form-check-input" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea name="Doses[${doseIndexCreate}].Notes" class="form-control"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger mt-2 remove-dose-create">Xóa liều</button>
+            `;
+            container.appendChild(newDose);
+            doseIndexCreate++;
+        });
+
+        document.getElementById('doses-container-create').addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-dose-create')) {
+                e.target.closest('.dose-item').remove();
+                reindexDosesCreate();
+            }
+        });
+
+        function reindexDosesCreate() {
+            const container = document.getElementById('doses-container-create');
+            const doseItems = container.querySelectorAll('.dose-item');
+            doseIndexCreate = 0;
+            doseItems.forEach(item => {
+                item.querySelector('input[name$=".Index"]').value = doseIndexCreate;
+                item.querySelectorAll('input, select, textarea').forEach(input => {
+                    const name = input.name;
+                    if (name) {
+                        input.name = name.replace(/Doses\[\d+\]/, `Doses[${doseIndexCreate}]`);
+                    }
+                });
+                doseIndexCreate++;
+            });
+        }
+    });
+</script>

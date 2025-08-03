@@ -1,0 +1,31 @@
+@model IEnumerable<QuanLyTiemChung.Web.Models.VaccinationSite>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h4>Quản lý Tồn kho Vắc-xin</h4>
+        <p class="text-muted">Chọn một điểm tiêm chủng để xem và cập nhật số lượng vắc-xin tồn kho.</p>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row align-items-end">
+            <div class="col-md-6">
+                <label for="siteSelector" class="form-label"><strong>Chọn điểm tiêm chủng</strong></label>
+                <select id="siteSelector" class="form-select form-select-lg">
+                    <option value="">-- Vui lòng chọn --</option>
+                    @foreach (var site in Model)
+                    {
+                        <option value="@site.Id">@site.Name - @site.Address</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="inventory-table-container">
+    <div class="alert alert-info">
+        Vui lòng chọn một điểm tiêm chủng để hiển thị dữ liệu tồn kho.
+    </div>
+</div>

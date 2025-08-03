@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int, IdentityU
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<VaccinationRecord> VaccinationRecords { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<SiteVaccineInventory> SiteVaccineInventories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,11 +48,17 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, int, IdentityU
             .OnDelete(DeleteBehavior.Restrict);
 
         // THÊM CẤU HÌNH MỚI CHO VACCINEDOSE
-        modelBuilder.Entity<VaccineDose>()
-            .HasOne(d => d.Vaccine) // Một liều tiêm thuộc về một vắc-xin
-            .WithMany(v => v.Doses)   // Một vắc-xin có nhiều liều tiêm
-            .HasForeignKey(d => d.VaccineId) // Khóa ngoại là VaccineId
-            .OnDelete(DeleteBehavior.Cascade); // Nếu xóa vắc-xin, các liều tiêm liên quan cũng sẽ bị xóa
+        modelBuilder.Entity<VaccineDose>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.RecommendedAge).HasMaxLength(100);
+            entity.Property(e => e.Notes).HasMaxLength(500);
+            
+            entity.HasOne(d => d.Vaccine) // Một liều tiêm thuộc về một vắc-xin
+                  .WithMany(v => v.Doses)   // Một vắc-xin có nhiều liều tiêm
+                  .HasForeignKey(d => d.VaccineId) // Khóa ngoại là VaccineId
+                  .OnDelete(DeleteBehavior.Cascade); // Nếu xóa vắc-xin, các liều tiêm liên quan cũng sẽ bị xóa
+        });
 
         // Cấu hình mối quan hệ một-một giữa Appointment và VaccinationRecord
         modelBuilder.Entity<Appointment>()

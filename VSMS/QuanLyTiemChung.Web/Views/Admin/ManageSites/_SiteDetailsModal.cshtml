@@ -1,0 +1,36 @@
+@* Views/Admin/ManageSites/_SiteDetailsModal.cshtml *@
+@model QuanLyTiemChung.Web.Models.VaccinationSite
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">Không tìm thấy thông tin điểm tiêm.</div>
+}
+else
+{
+    <div class="container-fluid">
+        <h6 class="mb-3 text-primary"><i class="fas fa-map-marker-alt me-2"></i>Thông tin chi tiết điểm tiêm chủng</h6>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <strong>Tên điểm tiêm:</strong>
+                <p class="mb-0">@Model.Name</p>
+            </li>
+            <li class="list-group-item">
+                <strong>Địa chỉ đầy đủ:</strong>
+                <p class="mb-0">@Model.Address</p>
+            </li>
+            <li class="list-group-item">
+                <strong>Giờ hoạt động:</strong>
+                <p class="mb-0">@(Model.OperatingHours ?? "Chưa cập nhật")</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="modal-footer mt-3">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Đóng
+        </button>
+        <button type="button" class="btn btn-primary" onclick="editSiteFromDetails(@Model.Id)">
+            <i class="fas fa-edit me-2"></i>Chỉnh sửa
+        </button>
+    </div>
+}

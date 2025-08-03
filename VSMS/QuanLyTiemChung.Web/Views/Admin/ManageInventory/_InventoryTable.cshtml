@@ -1,0 +1,50 @@
+@* Views/Admin/ManageInventory/_InventoryTable.cshtml *@
+@model IEnumerable<QuanLyTiemChung.Web.ViewModels.InventoryViewModel>
+
+@if (!Model.Any())
+{
+    // ... (giữ nguyên)
+}
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="mb-0">Bảng tồn kho</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        @* Sửa lại tiêu đề cột *@
+                        <th class="ps-4">Tên Vắc-xin</th>
+                        <th style="width: 150px;">Số lượng hiện tại</th>
+                        <th class="text-end pe-4" style="width: 120px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.AntiForgeryToken()
+                    @foreach (var item in Model)
+                    {
+                        <tr class="align-middle">
+                            <td class="ps-4">
+                                @* Hiển thị cả 2 loại tên *@
+                                <strong class="d-block">@item.VaccineName</strong>
+                                <small class="text-muted">@item.GenericName</small>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control quantity-input" value="@item.Quantity" min="0" data-vaccine-id="@item.VaccineId">
+                            </td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-success save-inventory-btn" 
+                                        data-site-id="@ViewBag.SiteId" 
+                                        data-vaccine-id="@item.VaccineId">
+                                    <i class="fas fa-save me-1"></i> Lưu
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

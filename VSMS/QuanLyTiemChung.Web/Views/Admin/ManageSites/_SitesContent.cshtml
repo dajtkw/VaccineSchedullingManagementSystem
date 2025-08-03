@@ -1,0 +1,83 @@
+@* Views/Admin/ManageSites/_SitesContent.cshtml *@
+@model IEnumerable<QuanLyTiemChung.Web.Models.VaccinationSite>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var provinces = ViewBag.Provinces as List<SelectListItem> ?? new List<SelectListItem>();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <p class="text-muted">Xem, tìm kiếm và quản lý các điểm tiêm chủng trong hệ thống.</p>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="openCreateSiteModal()">
+            <i class="fas fa-plus me-2"></i>Thêm điểm tiêm mới
+        </button>
+    </div>
+</div>
+
+<!-- BỘ LỌC VÀ TÌM KIẾM -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-8">
+                <label for="siteSearch" class="form-label"><strong>Tìm theo tên hoặc địa chỉ</strong></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" id="siteSearch" class="form-control" placeholder="Nhập tên điểm tiêm, quận, huyện...">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="provinceFilter" class="form-label"><strong>Lọc theo Tỉnh/Thành phố</strong></label>
+                <select id="provinceFilter" class="form-select">
+                    <option value="">Tất cả Tỉnh/Thành phố</option>
+                    @foreach (var province in provinces)
+                    {
+                        <option value="@province.Value">@province.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Tên Địa Điểm</th>
+                        <th>Địa chỉ</th>
+                        <th>Giờ hoạt động</th>
+                        <th class="text-end pe-4">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="siteTableBody">
+                    @foreach (var item in Model)
+                    {
+                        <tr data-province="@(item.Address.Split(new[] { ", " }, StringSplitOptions.None).LastOrDefault()?.Trim())">
+                            <td class="ps-4">@item.Name</td>
+                            <td>@item.Address</td>
+                            <td>@(item.OperatingHours ?? "Chưa cập nhật")</td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-info" data-action="view-site" data-site-id="@item.Id" title="Xem chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" data-action="edit-site" data-site-id="@item.Id" title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" data-action="delete-site" data-site-id="@item.Id" data-site-name="@item.Name" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

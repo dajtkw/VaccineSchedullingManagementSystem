@@ -17,5 +17,8 @@ public class Notification
     public string? NotificationType { get; set; } // "AppointmentReminder", "RegistrationConfirmed"
 
     // Navigation Property
+    [StringLength(255)]
+    public string? Url { get; set; }
+    
     public virtual User User { get; set; } = null!;
 }

@@ -1,105 +1,299 @@
-@model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
+@model QuanLyTiemChung.Web.ViewModels.MedicalStaffDashboardViewModel
 @{
     ViewData["Title"] = "Bảng Điều Khiển Nhân Viên Y Tế";
-
-    // Hàm trợ giúp để gán màu sắc cho trạng thái
-    Func<string, string> GetStatusBadgeClass = (status) =>
-    {
-        return status switch
-        {
-            "Confirmed" => "badge bg-success",
-            "Completed" => "badge bg-primary",
-            "Pending" => "badge bg-warning text-dark",
-            "Cancelled" => "badge bg-danger",
-            _ => "badge bg-secondary"
-        };
-    };
+    // Lấy dữ liệu từ ViewBag để dùng cho bộ lọc
+    var vaccinationSites = ViewBag.VaccinationSites as List<VaccinationSite> ?? new List<VaccinationSite>();
+    var vaccines = ViewBag.Vaccines as List<Vaccine> ?? new List<Vaccine>();
 }
-
-<div class="container mt-4">
-    <h3 class="mb-4">@ViewData["Title"]</h3>
-
-    @if (TempData["StatusMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["StatusMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+<style>
+    .clickable-row {
+        cursor: pointer;
     }
+</style>
 
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <h5 class="mb-0">Danh sách lịch hẹn cần xử lý</h5>
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+@* 1. CÁC THẺ THỐNG KÊ NHANH *@
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-warning h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="me-3">
+                        <div class="text-white-75 small">Chờ xác nhận</div>
+                        <div class="display-6" id="pending-count">@Model.PendingCount</div>
+                    </div>
+                    <i class="fas fa-clock fa-2x"></i>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            @if (Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Tên Vắc-xin</th>
-                                <th>Địa Điểm Tiêm</th>
-                                <th>Ngày Hẹn</th>
-                                <th>Mũi Thứ</th>
-                                <th class="text-center">Trạng Thái</th>
-                                <th class="text-center" style="width: 220px;">Hành Động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@item.VaccineName</td>
-                                    <td>
-                                        <strong>@item.SiteName</strong><br />
-                                        <small class="text-muted">@item.SiteAddress</small>
-                                    </td>
-                                    <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td>@item.DoseNumber</td>
-                                    <td class="text-center">
-                                        <span class="@GetStatusBadgeClass(item.Status)">
-                                            @item.Status
-                                        </span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                            @if (item.Status == "Pending")
-                                            {
-                                                <form asp-action="ConfirmAppointment" asp-route-id="@item.Id" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
-                                                </form>
-                                                <form asp-action="CancelAppointment" asp-route-id="@item.Id" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Hủy</button>
-                                                </form>
-                                            }
-                                            else if (item.Status == "Confirmed")
-                                            {
-                                                <form asp-action="CompleteVaccination" asp-route-id="@item.Id" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-primary">Hoàn thành</button>
-                                                </form>
-                                                <form asp-action="CancelAppointment" asp-route-id="@item.Id" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Hủy</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted fst-italic">Đã xử lý</span>
-                                            }
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="me-3">
+                        <div class="text-white-75 small">Lịch hẹn hôm nay</div>
+                        <div class="display-6">@Model.AppointmentsTodayCount</div>
+                    </div>
+                    <i class="fas fa-calendar-day fa-2x"></i>
                 </div>
-            }
-            else
-            {
-                <div class="text-center p-5">
-                    <p class="lead">Hiện tại không có lịch hẹn nào.</p>
-                </div>
-            }
+            </div>
         </div>
     </div>
 </div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        @* 2. CÁC TAB ĐIỀU HƯỚNG (ĐÃ BỎ TAB TẤT CẢ) *@
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-tab-filter="active">Cần Xử Lý</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-tab-filter="history">Lịch Sử</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        @* 3. BỘ LỌC NÂNG CAO *@
+        <div class="row g-3 mb-4 p-3 bg-light rounded border">
+            <div class="col-md-4">
+                <label for="siteFilter" class="form-label">Lọc theo điểm tiêm</label>
+                <select id="siteFilter" class="form-select">
+                    <option value="">Tất cả điểm tiêm</option>
+                    @foreach (var site in vaccinationSites)
+                    {
+                        <option value="@site.Name">@site.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="vaccineFilter" class="form-label">Lọc theo vắc-xin</label>
+                <select id="vaccineFilter" class="form-select">
+                    <option value="">Tất cả vắc-xin</option>
+                    @foreach (var vaccine in vaccines)
+                    {
+                        <option value="@vaccine.TradeName">@vaccine.TradeName (@vaccine.GenericName)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="dateFilter" class="form-label">Lọc theo ngày hẹn</label>
+                <input type="date" id="dateFilter" class="form-control">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button id="resetFilters" class="btn btn-outline-secondary w-100">Xóa bộ lọc</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Người đăng ký</th>
+                        <th>Vắc-xin</th>
+                        <th>Ngày hẹn</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-end pe-4">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentTableBody">
+                    @foreach (var item in Model.AllAppointments)
+                    {
+                        <tr id="appointment-row-@item.Id" class="clickable-row" data-id="@item.Id"
+                            data-status="@item.Status" data-site="@item.SiteName" data-vaccine="@item.VaccineName"
+                            data-date="@item.ScheduledDateTime.ToString("yyyy-MM-dd")">
+                            <td class="ps-4">
+                                <div>@item.UserFullName</div>
+                                <small class="text-muted">@item.SiteName</small>
+                            </td>
+                            <td>@item.VaccineName</td>
+                            <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-center status-cell">
+                                <span class="@item.StatusBadgeClass">@item.Status</span>
+                            </td>
+                            <td class="text-end pe-4 action-cell">
+                                @* Nút con mắt đã được xóa, các nút hành động khác giữ nguyên *@
+                                @if (item.Status == "Pending" || item.Status == "Confirmed")
+                                {
+                                    <form asp-controller="MedicalStaff" method="post" class="d-inline btn-group">
+                                        @Html.AntiForgeryToken()
+                                        @if (item.Status == "Pending")
+                                        {
+                                            <button asp-action="ConfirmAppointment" asp-route-id="@item.Id"
+                                                class="btn btn-sm btn-success" title="Xác nhận"><i
+                                                    class="fas fa-check"></i></button>
+                                        }
+                                        @if (item.Status == "Confirmed")
+                                        {
+                                            <button asp-action="CompleteVaccination" asp-route-id="@item.Id"
+                                                class="btn btn-sm btn-primary" title="Hoàn thành"><i
+                                                    class="fas fa-check-double"></i></button>
+                                        }
+                                        <button asp-action="CancelAppointment" asp-route-id="@item.Id"
+                                            class="btn btn-sm btn-danger" title="Hủy"><i class="fas fa-times"></i></button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small px-2">Đã xử lý</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@* MODAL HIỂN THỊ CHI TIẾT *@
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Chi Tiết Lịch Hẹn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detailsModalBody">
+                @* Nội dung chi tiết sẽ được tải vào đây bằng AJAX *@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @* Thêm các file thư viện của Select2 *@
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo Select2 cho các bộ lọc
+            $('#siteFilter').select2({
+                theme: 'bootstrap-5'
+            });
+            $('#vaccineFilter').select2({
+                theme: 'bootstrap-5'
+            });
+
+            // --- Logic cho Tìm kiếm và Lọc Tab ---
+            function filterTable() {
+                const siteFilter = $('#siteFilter').val();
+                const vaccineFilter = $('#vaccineFilter').val();
+                const dateFilter = $('#dateFilter').val();
+                const activeTabFilter = $('.nav-tabs .nav-link.active').data('tab-filter');
+
+                $('#appointmentTableBody tr').each(function () {
+                    const row = $(this);
+                    const rowStatus = row.data('status');
+                    const rowSite = row.data('site');
+                    const rowVaccine = row.data('vaccine');
+                    const rowDate = row.data('date');
+
+                    let tabMatch = false;
+                    if (activeTabFilter === 'active') {
+                        tabMatch = (rowStatus === 'Pending' || rowStatus === 'Confirmed');
+                    } else if (activeTabFilter === 'history') {
+                        tabMatch = (rowStatus === 'Completed' || rowStatus === 'Cancelled');
+                    }
+
+                    const siteMatch = (siteFilter === '' || rowSite === siteFilter);
+                    const vaccineMatch = (vaccineFilter === '' || rowVaccine === vaccineFilter);
+                    const dateMatch = (dateFilter === '' || rowDate === dateFilter);
+
+                    if (tabMatch && siteMatch && vaccineMatch && dateMatch) {
+                        row.show();
+                    } else {
+                        row.hide();
+                    }
+                });
+            }
+
+            // Gắn sự kiện cho các bộ lọc
+            $('#siteFilter, #vaccineFilter, #dateFilter').on('change', filterTable);
+
+            $('.nav-tabs .nav-link').on('click', function (e) {
+                e.preventDefault();
+                $('.nav-tabs .nav-link').removeClass('active');
+                $(this).addClass('active');
+                filterTable();
+            });
+
+            $('#resetFilters').on('click', function () {
+                $('#siteFilter').val('').trigger('change');
+                $('#vaccineFilter').val('').trigger('change');
+                $('#dateFilter').val('');
+            });
+
+            filterTable();
+
+            // --- Logic cho Real-time và Xem chi tiết ---
+            const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            const modalBody = $('#detailsModalBody');
+
+            $('#appointmentTableBody').on('click', 'tr.clickable-row', function (e) {
+                // Nếu click vào các nút hành động thì không làm gì cả
+                if ($(e.target).closest('form, .btn-group').length > 0) {
+                    return;
+                }
+
+                const appointmentId = $(this).data('id');
+
+                modalBody.html('<div class="text-center p-5"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+                detailsModal.show();
+
+                $.get(`/MedicalStaff/GetAppointmentDetails/${appointmentId}`)
+                    .done(function (response) {
+                        modalBody.html(response);
+                    })
+                    .fail(function () {
+                        modalBody.html('<div class="alert alert-danger">Không thể tải thông tin chi tiết.</div>');
+                    });
+            });
+
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub")
+                .build();
+
+            connection.on("ReceiveNewAppointment", function (appointment) {
+                const pendingCountElement = $('#pending-count');
+                let currentCount = parseInt(pendingCountElement.text());
+                pendingCountElement.text(currentCount + 1);
+
+                const newRowHtml = `
+                            <tr id="appointment-row-${appointment.id}" data-status="${appointment.status}" data-site="${appointment.siteName}" data-vaccine="${appointment.vaccineName}" data-date="${new Date(appointment.scheduledDateTime).toISOString().split('T')[0]}" style="display: none;">
+                                <td class="ps-4">
+                                    <div>${appointment.userFullName}</div>
+                                    <small class="text-muted">${appointment.siteName}</small>
+                                </td>
+                                <td>${appointment.vaccineName}</td>
+                                <td>${new Date(appointment.scheduledDateTime).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
+                                <td class="text-center status-cell">
+                                    <span class="${appointment.statusBadgeClass}">${appointment.status}</span>
+                                </td>
+                                <td class="text-end pe-4 action-cell">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-info" data-action="view-details" data-id="${appointment.id}" title="Xem chi tiết"><i class="fas fa-eye"></i></button>
+                                        <form action="/MedicalStaff/ConfirmAppointment/${appointment.id}" method="post" class="d-inline"> @Html.AntiForgeryToken() <button type="submit" class="btn btn-sm btn-success" title="Xác nhận"><i class="fas fa-check"></i></button></form>
+                                        <form action="/MedicalStaff/CancelAppointment/${appointment.id}" method="post" class="d-inline"> @Html.AntiForgeryToken() <button type="submit" class="btn btn-sm btn-danger" title="Hủy"><i class="fas fa-times"></i></button></form>
+                                    </div>
+                                </td>
+                            </tr>`;
+
+                const newRow = $(newRowHtml);
+                $('#appointmentTableBody').prepend(newRow);
+                newRow.fadeIn(1000);
+                filterTable(); // Áp dụng lại bộ lọc để ẩn/hiện dòng mới nếu cần
+            });
+
+            connection.start().catch(function (err) {
+                return console.error("SignalR Connection Error: " + err.toString());
+            });
+        });
+    </script>
+}

@@ -1,0 +1,180 @@
+@* Views/Admin/_UserDetailsModal.cshtml *@
+@model QuanLyTiemChung.Web.Models.User
+@{
+    Func<string, string> GetStatusBadgeClass = (status) =>
+    {
+        return status switch
+        {
+            "Confirmed" => "badge bg-success",
+            "Completed" => "badge bg-primary", 
+            "Pending" => "badge bg-warning text-dark",
+            "Cancelled" => "badge bg-danger",
+            _ => "badge bg-secondary"
+        };
+    };
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-user me-2"></i>Thông tin cá nhân</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <div class="avatar-lg mx-auto">
+                        <span class="avatar-title bg-primary rounded-circle">
+                            @Model.FullName.Substring(0, 1).ToUpper()
+                        </span>
+                    </div>
+                </div>
+                
+                <dl class="row">
+                    <dt class="col-sm-4">ID:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-light text-dark">#@Model.Id</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Họ và tên:</dt>
+                    <dd class="col-sm-8"><strong>@Model.FullName</strong></dd>
+
+                    <dt class="col-sm-4">Email:</dt>
+                    <dd class="col-sm-8">
+                        @Model.Email
+                        @if (Model.EmailConfirmed)
+                        {
+                            <i class="fas fa-check-circle text-success ms-1" title="Email đã xác thực"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-exclamation-circle text-warning ms-1" title="Email chưa xác thực"></i>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Số điện thoại:</dt>
+                    <dd class="col-sm-8">
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            @Model.PhoneNumber
+                        }
+                        else
+                        {
+                            <span class="text-muted">Chưa cập nhật</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Ngày sinh:</dt>
+                    <dd class="col-sm-8">@Model.DateOfBirth.ToString("dd/MM/yyyy")</dd>
+
+                    <dt class="col-sm-4">Địa chỉ:</dt>
+                    <dd class="col-sm-8">
+                        @if (!string.IsNullOrEmpty(Model.Address))
+                        {
+                            @Model.Address
+                        }
+                        else
+                        {
+                            <span class="text-muted">Chưa cập nhật</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Vai trò:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.UserRoles != null && Model.UserRoles.Any())
+                        {
+                            @foreach (var userRole in Model.UserRoles)
+                            {
+                                var badgeClass = userRole.Role.Name switch {
+                                    "Admin" => "bg-danger",
+                                    "HealthOfficial" => "bg-success", 
+                                    "Citizen" => "bg-primary",
+                                    _ => "bg-secondary"
+                                };
+                                <span class="badge @badgeClass">@userRole.Role.Name</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Chưa có vai trò</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Lịch sử Lịch hẹn</h6>
+            </div>
+            <div class="card-body">
+                @if (Model.Appointments != null && Model.Appointments.Any())
+                {
+                    <div class="mb-2">
+                        <small class="text-muted">
+                            Tổng số lịch hẹn: <strong>@Model.Appointments.Count()</strong>
+                        </small>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Vắc-xin</th>
+                                    <th>Ngày hẹn</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var appt in Model.Appointments.OrderByDescending(a => a.ScheduledDateTime).Take(5))
+                                {
+                                    <tr>
+                                        <td>
+                                            <small><strong>@(appt.Vaccine?.TradeName ?? "N/A")</strong></small>
+                                        </td>
+                                        <td>
+                                            <small>@appt.ScheduledDateTime.ToString("dd/MM/yyyy")</small>
+                                        </td>
+                                        <td>
+                                            <span class="@GetStatusBadgeClass(appt.Status) badge-sm">@appt.Status</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @if (Model.Appointments.Count() > 5)
+                        {
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Và @(Model.Appointments.Count() - 5) lịch hẹn khác...
+                            </small>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center p-3">
+                        <i class="fas fa-calendar-times fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Người dùng này chưa có lịch hẹn nào.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times me-2"></i>Đóng
+    </button>
+    <button type="button" class="btn btn-primary" onclick="editUserFromDetails(@Model.Id)">
+        <i class="fas fa-edit me-2"></i>Chỉnh sửa
+    </button>
+</div>
+
+<style>
+.avatar-lg {
+    width: 64px;
+    height: 64px;
+}
+</style>

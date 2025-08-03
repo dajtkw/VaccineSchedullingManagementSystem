@@ -9,4 +9,8 @@ public interface IVaccineRepository
     Task AddAsync(Vaccine vaccine);
     Task UpdateAsync(Vaccine vaccine);
     Task<bool> DeleteAsync(int id);
+    Task<Vaccine?> GetByIdWithDosesAsync(int id);
+    Task AddVaccineWithDosesAsync(Vaccine vaccine);
+    Task UpdateVaccineWithDosesAsync(Vaccine vaccine);
+    Task<Vaccine?> GetVaccineDetailsWithAllIncludesAsync(int id);
 }

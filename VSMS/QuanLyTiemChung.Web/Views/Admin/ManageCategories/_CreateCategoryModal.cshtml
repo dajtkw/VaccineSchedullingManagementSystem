@@ -1,0 +1,29 @@
+@* Views/Admin/ManageCategories/_CreateCategoryModal.cshtml *@
+@model QuanLyTiemChung.Web.Models.VaccineCategory
+
+<form id="createCategoryForm" 
+      data-url="@Url.Action("CreateCategoryApi", "Admin")" 
+      method="post" 
+      novalidate>
+    
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Tên danh mục</label>
+        <input asp-for="Name" class="form-control" placeholder="Ví dụ: Vắc-xin cho trẻ em">
+        <span asp-validation-for="Name" class="text-danger small"></span>
+    </div>
+
+    @* <div class="mb-3">
+        <label asp-for="Description" class="form-label">Mô tả</label>
+        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mô tả ngắn về danh mục..."></textarea>
+        <span asp-validation-for="Description" class="text-danger small"></span>
+    </div> *@
+
+    <div class="modal-footer mt-4">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Lưu
+        </button>
+    </div>
+</form>

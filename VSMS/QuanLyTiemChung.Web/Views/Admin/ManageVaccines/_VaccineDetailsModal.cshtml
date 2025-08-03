@@ -1,0 +1,197 @@
+@model QuanLyTiemChung.Web.Models.Vaccine
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-syringe me-2"></i>Thông tin vắc-xin
+                </h6>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">ID:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-light text-dark">#@Model.Id</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Tên thương mại:</dt>
+                    <dd class="col-sm-8"><strong>@Model.TradeName</strong></dd>
+
+                    <dt class="col-sm-4">Tên chung:</dt>
+                    <dd class="col-sm-8">@Model.GenericName</dd>
+
+                    <dt class="col-sm-4">Danh mục:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-primary">@(Model.VaccineCategory?.Name ?? "Chưa phân loại")</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Nhà sản xuất:</dt>
+                    <dd class="col-sm-8">@Model.Manufacturer</dd>
+
+                    <dt class="col-sm-4">Xuất xứ:</dt>
+                    <dd class="col-sm-8">@Model.CountryOfOrigin</dd>
+
+                    <dt class="col-sm-4">Giá:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Price.HasValue)
+                        {
+                            <span class="text-success fw-bold">@Model.Price.Value.ToString("N0") VNĐ</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Miễn phí</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Độ tuổi:</dt>
+                    <dd class="col-sm-8">
+                        <!-- 🔥 SỬA: Loại bỏ 'năm tuổi' để flexible với đơn vị -->
+                        <span class="badge bg-info">@Model.MinAge - @Model.MaxAge tuổi</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Trạng thái:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-secondary")">
+                            @(Model.IsActive ? "Đang sử dụng" : "Ngừng sử dụng")
+                        </span>
+                    </dd>
+                </dl>
+
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div class="mt-3">
+                        <h6><i class="fas fa-info-circle me-2"></i>Mô tả:</h6>
+                        <p class="text-muted">@Model.Description</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Indications))
+                {
+                    <div class="mt-3">
+                        <h6><i class="fas fa-check-circle me-2 text-success"></i>Chỉ định:</h6>
+                        <p class="text-muted">@Model.Indications</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Contraindications))
+                {
+                    <div class="mt-3">
+                        <h6><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Chống chỉ định:</h6>
+                        <p class="text-muted">@Model.Contraindications</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Thống kê
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <div class="mb-2">
+                        <small class="text-muted">Tổng số liều</small>
+                        <div class="h4 mb-0 text-primary">@(Model.Doses?.Count ?? 0)</div>
+                    </div>
+                </div>
+
+                @if (Model.Doses != null && Model.Doses.Any())
+                {
+                    <div class="mb-3">
+                        <h6>Lịch tiêm:</h6>
+                        <div class="dose-schedule">
+                            @foreach (var dose in Model.Doses.OrderBy(d => d.DoseNumber))
+                            {
+                                <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                    <div>
+                                        <span class="badge bg-primary">Mũi @dose.DoseNumber</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <!-- 🔥 SỬA: Kiểm tra nếu có RecommendedAge -->
+                                        <small class="text-muted">
+                                            @if (!string.IsNullOrEmpty(dose.RecommendedAge))
+                                            {
+                                                @dose.RecommendedAge
+                                            }
+                                            else
+                                            {
+                                                <span>Liều @dose.DoseNumber</span>
+                                            }
+                                        </small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar me-1"></i>
+                        Tạo: @Model.CreatedAt.ToString("dd/MM/yyyy")
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Appointments != null && Model.Appointments.Any())
+        {
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>Lịch hẹn gần đây
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @foreach (var appointment in Model.Appointments.OrderByDescending(a => a.ScheduledDateTime).Take(5))
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <small><strong>@appointment.User.FullName</strong></small><br>
+                                <small class="text-muted">@appointment.ScheduledDateTime.ToString("dd/MM/yyyy")</small>
+                            </div>
+                            <span class="badge @(appointment.Status switch {
+                                "Confirmed" => "bg-success",
+                                "Completed" => "bg-primary", 
+                                "Pending" => "bg-warning text-dark",
+                                "Cancelled" => "bg-danger",
+                                _ => "bg-secondary"
+                            })">
+                                @appointment.Status
+                            </span>
+                        </div>
+                    }
+                    
+                    @if (Model.Appointments.Count() > 5)
+                    {
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Và @(Model.Appointments.Count() - 5) lịch hẹn khác...
+                        </small>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times me-2"></i>Đóng
+    </button>
+    <button type="button" class="btn btn-primary" onclick="editVaccineFromDetails(@Model.Id)">
+        <i class="fas fa-edit me-2"></i>Chỉnh sửa
+    </button>
+</div>
+
+<style>
+.dose-schedule {
+    max-height: 200px;
+    overflow-y: auto;
+}
+</style>

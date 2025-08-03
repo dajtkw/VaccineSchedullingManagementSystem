@@ -1,0 +1,70 @@
+@* File: Views/Appointment/_AppointmentListPartial.cshtml *@
+@model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
+
+@{
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Confirmed" => "badge bg-success",
+            "Completed" => "badge bg-primary",
+            "Pending" => "badge bg-warning text-dark",
+            "Cancelled" => "badge bg-danger",
+            _ => "badge bg-secondary"
+        };
+    }
+}
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Loại Vắc-xin</th>
+                    <th>Địa Điểm Tiêm</th>
+                    <th>Ngày Hẹn</th>
+                    <th class="text-center">Mũi Thứ</th>
+                    <th class="text-center">Trạng Thái</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="appointment-row-@item.Id">
+                        <td><strong>@item.VaccineName</strong></td>
+                        <td>
+                            @item.SiteName
+                            <div class="text-muted small">@item.SiteAddress</div>
+                        </td>
+                        <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy, HH:mm")</td>
+                        <td class="text-center">@item.DoseNumber</td>
+                        <td class="text-center status-cell">
+                            <span class="@GetStatusBadgeClass(item.Status)">@item.Status</span>
+                        </td>
+                        <td class="text-center action-cell">
+                            @if (item.Status == "Completed")
+                            {
+                                <a asp-action="VaccinationCertificate" asp-route-appointmentId="@item.Id" class="btn btn-sm btn-info">Xem chứng nhận</a>
+                            }
+                            @if (item.Status == "Pending" || item.Status == "Confirmed")
+                            {
+                                <button class="btn btn-sm btn-outline-danger btn-cancel-appointment" data-appointment-id="@item.Id" title="Hủy lịch hẹn này">
+                                    <i class="fas fa-times"></i> Hủy
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="text-center p-5">
+        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+        <p class="lead">Không có lịch hẹn nào phù hợp.</p>
+    </div>
+}

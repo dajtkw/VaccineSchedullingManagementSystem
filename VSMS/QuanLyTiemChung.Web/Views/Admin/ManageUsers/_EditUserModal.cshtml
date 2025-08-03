@@ -1,0 +1,54 @@
+@* Views/Admin/_EditUserModal.cshtml *@
+@model QuanLyTiemChung.Web.ViewModels.EditUserViewModel
+
+<form id="editUserForm" data-url="/Admin/EditUserApi">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    
+    <!-- Validation Summary -->
+    <div id="validation-summary" class="alert alert-danger" style="display: none;"></div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        
+        <input asp-for="Email" class="form-control" disabled />
+        
+        <input type="hidden" asp-for="Email" />
+
+        <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i>Email không thể thay đổi
+        </small>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label">
+            Họ và tên <span class="text-danger">*</span>
+        </label>
+        <input asp-for="FullName" class="form-control" required />
+        <div asp-validation-for="FullName" class="invalid-feedback"></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="form-label">Số điện thoại</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <div asp-validation-for="PhoneNumber" class="invalid-feedback"></div>
+    </div>
+    
+    <div class="mb-3">
+        <label asp-for="SelectedRole" class="form-label">
+            Vai trò <span class="text-danger">*</span>
+        </label>
+        <select asp-for="SelectedRole" asp-items="@Model.AllRoles" class="form-select" required>
+        </select>
+        <div asp-validation-for="SelectedRole" class="invalid-feedback"></div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Hủy
+        </button>
+        <button type="submit" class="btn btn-primary" id="editUserBtn">
+            <i class="fas fa-save me-2"></i>Lưu thay đổi
+        </button>
+    </div>
+</form>

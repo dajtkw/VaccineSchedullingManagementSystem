@@ -1,0 +1,53 @@
+@model IEnumerable<QuanLyTiemChung.Web.ViewModels.AppointmentViewModel>
+
+@if (!Model.Any())
+{
+    <div class="text-center p-5">
+        <p class="text-muted">Không có lịch hẹn nào để hiển thị.</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Vắc-xin</th>
+                    <th>Mũi thứ</th>
+                    <th>Điểm tiêm chủng</th>
+                    <th>Thời gian hẹn</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.VaccineName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DoseNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.VaccinationSiteName)</td>
+                        <td>@item.ScheduledDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <span class="badge @item.StatusBadgeClass">@item.Status</span>
+                        </td>
+                        <td>
+                            @if (item.Status == "Pending" || item.Status == "Confirmed")
+                            {
+                                <button class="btn btn-sm btn-outline-danger btn-cancel-appointment" data-appointment-id="@item.Id">
+                                    <i class="fas fa-times"></i> Hủy
+                                </button>
+                            }
+                            @if (item.Status == "Completed")
+                            {
+                                <a href="@Url.Action("VaccinationCertificate", "Appointment", new { appointmentId = item.Id })" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-file-certificate"></i> Xem chứng nhận
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

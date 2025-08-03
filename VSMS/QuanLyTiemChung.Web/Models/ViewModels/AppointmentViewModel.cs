@@ -7,7 +7,7 @@ namespace QuanLyTiemChung.Web.ViewModels
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; } 
+        public int UserId { get; set; }
 
         [Display(Name = "Họ và tên")]
         public string UserFullName { get; set; } = string.Empty;
@@ -35,5 +35,9 @@ namespace QuanLyTiemChung.Web.ViewModels
 
         [Display(Name = "Ngày đăng ký")]
         public DateTime CreatedAt { get; set; }
+        public string VaccinationSiteName { get; set; } // Matches the property in your error
+
+        public string StatusBadgeClass { get; set; } // Matches the property in your error
+
     }
 }

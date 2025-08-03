@@ -1,0 +1,52 @@
+@* Views/Admin/_CategoriesContent.cshtml *@
+@model IEnumerable<QuanLyTiemChung.Web.Models.VaccineCategory>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <p class="text-muted">Thêm, sửa, hoặc xóa các danh mục để phân loại vắc-xin.</p>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="openCreateCategoryModal()">
+            <i class="fas fa-plus me-2"></i>Thêm Danh mục Mới
+        </button>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Tên Danh mục</th>
+                        <th class="text-center">Số Vắc-xin</th>
+                        <th class="text-end pe-4">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="align-middle ps-4">
+                                <strong>@item.Name</strong>
+                            </td>
+                            <td class="text-center align-middle">
+                                <span class="badge bg-info">@(item.Vaccines?.Count() ?? 0) vắc-xin</span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editCategory(@item.Id, '@item.Name')">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCategory(@item.Id, '@item.Name')">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
