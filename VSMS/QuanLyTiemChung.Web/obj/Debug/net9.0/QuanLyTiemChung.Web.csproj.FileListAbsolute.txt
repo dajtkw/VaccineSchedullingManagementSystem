@@ -181,3 +181,5 @@ f:\chuacode\Computer Network Programming\VaccineSchedullingManagementSystem\VSMS
 f:\chuacode\Computer Network Programming\VaccineSchedullingManagementSystem\VSMS\QuanLyTiemChung.Web\obj\Debug\net9.0\QuanLyTiemChung.Web.genruntimeconfig.cache
 f:\chuacode\Computer Network Programming\VaccineSchedullingManagementSystem\VSMS\QuanLyTiemChung.Web\obj\Debug\net9.0\ref\QuanLyTiemChung.Web.dll
 F:\chuacode\Computer Network Programming\VaccineSchedullingManagementSystem\VSMS\QuanLyTiemChung.Web\obj\Debug\net9.0\compressed\1hxqxxxr9k-eu8s2l6m68.gz
+F:\chuacode\Computer Network Programming\VaccineSchedullingManagementSystem\VSMS\QuanLyTiemChung.Web\obj\Debug\net9.0\compressed\p71gu47lrm-d171zkdrjx.gz
+F:\chuacode\Computer Network Programming\VaccineSchedullingManagementSystem\VSMS\QuanLyTiemChung.Web\obj\Debug\net9.0\compressed\a1bt2htlhk-6d0lkjaslc.gz

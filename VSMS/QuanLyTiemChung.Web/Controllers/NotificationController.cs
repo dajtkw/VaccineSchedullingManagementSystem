@@ -20,7 +20,6 @@ namespace QuanLyTiemChung.Web.Controllers
             _userManager = userManager;
         }
 
-        // Action cho trang chính
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -29,7 +28,6 @@ namespace QuanLyTiemChung.Web.Controllers
             // Lấy tất cả thông báo
             var notifications = await _notificationRepository.GetByUserIdAsync(user.Id);
 
-            // Đánh dấu tất cả là đã đọc khi người dùng vào xem trang
             await _notificationRepository.MarkAllAsReadAsync(user.Id);
 
             return View(notifications);
@@ -44,7 +42,7 @@ namespace QuanLyTiemChung.Web.Controllers
 
             var notifications = await _notificationRepository.GetByUserIdAsync(user.Id);
             int unreadCount = notifications.Count(n => !n.IsRead);
-            
+
             return Json(new { count = unreadCount });
         }
 
@@ -57,24 +55,27 @@ namespace QuanLyTiemChung.Web.Controllers
             if (user == null) return Unauthorized();
 
             var notifications = await _notificationRepository.GetByUserIdAsync(user.Id);
-            
-            var result = notifications.Select(n => new 
+
+            var result = notifications.Select(n => new
             {
+                id = n.Id, // <-- Trả về Id
                 message = n.Message,
                 isRead = n.IsRead,
-                createdAt = n.CreatedAt.ToString("o") // Định dạng ISO 8601
+                createdAt = n.CreatedAt.ToString("o"), // Định dạng ISO 8601
+                url = n.Url // <-- Trả về Url
             });
 
             return Json(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> MarkAllAsRead()
+        public async Task<IActionResult> MarkAsRead(long id)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
-            await _notificationRepository.MarkAllAsReadAsync(user.Id);
+            // TODO: Bạn có thể thêm bước kiểm tra xem thông báo này có thực sự thuộc về người dùng đang đăng nhập không
+            await _notificationRepository.MarkAsReadAsync(id);
             return Ok();
         }
     }

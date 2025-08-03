@@ -17,11 +17,13 @@
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                         <h5 class="mb-3 border-bottom pb-2">1. Chọn địa điểm và thời gian</h5>
-                        
+
                         @* --- Address Filters --- *@
                         <div class="row mb-3">
                             <div class="col-12">
-                                <a class="text-primary text-decoration-none" data-bs-toggle="collapse" href="#filterCollapse" role="button" aria-expanded="false" aria-controls="filterCollapse">
+                                <a class="text-primary text-decoration-none" data-bs-toggle="collapse"
+                                   href="#filterCollapse" role="button" aria-expanded="false"
+                                   aria-controls="filterCollapse">
                                     <i class="fas fa-filter me-1"></i> Lọc chi tiết theo Tỉnh/Huyện/Xã
                                 </a>
                             </div>
@@ -48,7 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         @* --- Main Selections --- *@
                         <div class="row mb-4">
                             <div class="col-md-12 mb-3">
@@ -66,6 +68,17 @@
                         </div>
 
                         <h5 class="mb-3 border-bottom pb-2">2. Chọn vắc-xin</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="categoryFilterSelect" class="form-label">Lọc theo danh mục vắc-xin (không
+                                    bắt buộc)</label>
+                                <select id="categoryFilterSelect" class="form-select" disabled>
+                                    <option value="0">-- Hiển thị tất cả danh mục --</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="row mb-4">
                             <div class="col-md-8">
                                 <label asp-for="SelectedVaccineId" class="form-label">Loại vắc-xin</label>
@@ -76,7 +89,8 @@
                             </div>
                             <div class="col-md-4">
                                 <label asp-for="DoseNumber" class="form-label">Mũi tiêm thứ</label>
-                                <input asp-for="DoseNumber" class="form-control" type="number" min="1" placeholder="Ví dụ: 1"/>
+                                <input asp-for="DoseNumber" class="form-control" type="number" min="1"
+                                    placeholder="Ví dụ: 1" />
                                 <span asp-validation-for="DoseNumber" class="text-danger"></span>
                             </div>
                         </div>
@@ -84,7 +98,8 @@
                         <h5 class="mb-3 border-bottom pb-2">3. Ghi chú</h5>
                         <div class="mb-4">
                             <label asp-for="Notes" class="form-label">Ghi chú thêm (nếu có)</label>
-                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Thông tin về tình trạng sức khỏe, dị ứng hoặc yêu cầu đặc biệt..."></textarea>
+                            <textarea asp-for="Notes" class="form-control" rows="3"
+                                placeholder="Thông tin về tình trạng sức khỏe, dị ứng hoặc yêu cầu đặc biệt..."></textarea>
                         </div>
 
                         <div class="d-grid gap-2 pt-3">
@@ -99,70 +114,107 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
+
     <script>
         $(document).ready(function () {
+            // --- Khai báo các đối tượng jQuery ---
             const provinceSelect = $('#provinceSelect');
             const districtSelect = $('#districtSelect');
             const wardSelect = $('#wardSelect');
             const siteSelect = $('#SelectedSiteId');
             const vaccineSelect = $('#SelectedVaccineId');
+            const categoryFilterSelect = $('#categoryFilterSelect');
 
+            // --- Khởi tạo Select2 ---
             siteSelect.select2({
                 theme: 'bootstrap-5',
                 placeholder: 'Tìm hoặc chọn một điểm tiêm chủng',
             });
-            
+
+            // --- Các hàm tiện ích ---
             function resetDropdown(dropdown, defaultText, isDisabled = true) {
                 dropdown.empty().append(`<option value="">${defaultText}</option>`).prop('disabled', isDisabled);
-                if (dropdown.is(siteSelect)) {
+                if (dropdown.is(siteSelect) || dropdown.is(vaccineSelect)) {
                     dropdown.trigger('change');
                 }
             }
 
+            // --- Các hàm tải dữ liệu (AJAX) ---
             function populateSites(province, district, ward) {
                 resetDropdown(siteSelect, 'Đang tải điểm tiêm...');
                 $.getJSON('/Appointment/GetSites', { provinceName: province, districtName: district, wardName: ward })
                     .done(function (data) {
                         resetDropdown(siteSelect, '-- Vui lòng chọn --', !(data && data.length > 0));
                         $.each(data, function (index, item) {
-                            siteSelect.append($('<option>', { value: item.value, text: item.text }));
+                            siteSelect.append(new Option(item.text, item.value));
                         });
                         siteSelect.trigger('change');
+                    })
+                    .fail(function() {
+                        resetDropdown(siteSelect, 'Lỗi tải điểm tiêm');
                     });
             }
-            
-            siteSelect.on('change', function() {
-                const siteId = $(this).val();
-                resetDropdown(vaccineSelect, '-- Chọn điểm tiêm trước --');
 
-                if (siteId) {
-                    vaccineSelect.html('<option value="">Đang tải vắc-xin...</option>');
-                    $.getJSON('/Appointment/GetAvailableVaccines', { siteId: siteId })
-                        .done(function(data) {
-                            if (data && data.length > 0) {
-                                resetDropdown(vaccineSelect, '-- Vui lòng chọn vắc-xin --', false);
-                                $.each(data, function(index, item) {
-                                    vaccineSelect.append($('<option>', {
-                                        value: item.value,
-                                        text: item.text
-                                    }));
-                                });
-                            } else {
-                                // THAY ĐỔI THÔNG BÁO TẠI ĐÂY
-                                resetDropdown(vaccineSelect, 'Đã hết hàng');
-                            }
-                        })
-                        .fail(function() {
-                             resetDropdown(vaccineSelect, '-- Lỗi tải danh sách vắc-xin --');
-                        });
+            function loadCategories() {
+                resetDropdown(categoryFilterSelect, 'Đang tải danh mục...', true);
+                $.getJSON('/Appointment/GetCategoriesJson')
+                    .done(function (categories) {
+                        categoryFilterSelect.empty().append('<option value="0">-- Hiển thị tất cả --</option>');
+                        if (categories && categories.length > 0) {
+                            $.each(categories, function (i, cat) {
+                                categoryFilterSelect.append(new Option(cat.name, cat.id));
+                            });
+                            categoryFilterSelect.prop('disabled', false);
+                        }
+                    });
+            }
+
+            function loadVaccines() {
+                const siteId = siteSelect.val();
+                const categoryId = categoryFilterSelect.val();
+                
+                if (!siteId) {
+                    resetDropdown(vaccineSelect, '-- Chọn điểm tiêm trước --');
+                    return;
                 }
-            });
+
+                resetDropdown(vaccineSelect, 'Đang tải vắc-xin...');
+                $.getJSON('/Appointment/GetAvailableVaccines', { siteId: siteId, categoryId: categoryId })
+                    .done(function (groupedData) {
+                        if (groupedData && groupedData.length > 0) {
+                            resetDropdown(vaccineSelect, '-- Vui lòng chọn vắc-xin --', false);
+                            $.each(groupedData, function (index, group) {
+                                const optgroup = $(`<optgroup label="${group.groupName}"></optgroup>`);
+                                $.each(group.vaccines, function (i, vaccine) {
+                                     let displayText = vaccine.text;
+                                     if (vaccine.isScheduledDose) {
+                                         displayText += " (Theo liệu trình)";
+                                     }
+                                    optgroup.append(new Option(displayText, vaccine.value));
+                                });
+                                vaccineSelect.append(optgroup);
+                            });
+                        } else {
+                            resetDropdown(vaccineSelect, 'Không có vắc-xin phù hợp');
+                        }
+                        vaccineSelect.trigger('change');
+                    })
+                    .fail(function() {
+                        resetDropdown(vaccineSelect, 'Lỗi tải vắc-xin');
+                    });
+            }
+
+            // --- Gắn các sự kiện ---
+            siteSelect.on('change', loadVaccines);
+            categoryFilterSelect.on('change', loadVaccines);
 
             provinceSelect.on('change', function () {
                 const provinceName = $(this).val();
@@ -173,12 +225,12 @@
                 if (provinceName) {
                     $.getJSON(`/Appointment/GetDistricts`, { provinceName: provinceName }, function (data) {
                         $.each(data, function (index, item) {
-                            districtSelect.append($('<option>', { value: item, text: item }));
+                            districtSelect.append(new Option(item, item));
                         });
                     });
                 }
             });
-            
+
             districtSelect.on('change', function () {
                 const provinceName = provinceSelect.val();
                 const districtName = $(this).val();
@@ -188,7 +240,7 @@
                 if (districtName) {
                     $.getJSON(`/Appointment/GetWards`, { provinceName: provinceName, districtName: districtName }, function (data) {
                         $.each(data, function (index, item) {
-                            wardSelect.append($('<option>', { value: item, text: item }));
+                            wardSelect.append(new Option(item, item));
                         });
                     });
                 }
@@ -201,16 +253,17 @@
                 populateSites(provinceName, districtName, wardName);
             });
 
+            // --- Tải dữ liệu ban đầu ---
             function initialLoad() {
                 populateSites('', '', '');
+                loadCategories();
                 
-                $.getJSON('/Appointment/GetProvinces')
-                    .done(function(data) {
-                         resetDropdown(provinceSelect, '-- Tất cả --', false);
-                         $.each(data, function (index, item) {
-                            provinceSelect.append($('<option>', { value: item.value, text: item.text }));
-                        });
+                $.getJSON('/Appointment/GetProvinces').done(function (data) {
+                    resetDropdown(provinceSelect, '-- Tất cả --', false);
+                    $.each(data, function (index, item) {
+                        provinceSelect.append(new Option(item.text, item.value));
                     });
+                });
             }
 
             initialLoad();

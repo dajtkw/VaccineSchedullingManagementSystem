@@ -15,6 +15,8 @@ namespace QuanLyTiemChung.Web.Interfaces
         Task UpdateAsync(Appointment appointment);
         Task<IEnumerable<Appointment>> GetUpcomingAppointments(int hours);
         Task<bool> DeleteAsync(int id);
+        Task<Appointment?> GetLastCompletedAppointmentAsync(int userId, int vaccineId);
+
 
     }
 }

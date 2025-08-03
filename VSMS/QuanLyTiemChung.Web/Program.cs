@@ -39,6 +39,8 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IVaccineCategoryRepository, VaccineCategoryRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddHostedService<AppointmentReminderService>();
+builder.Services.AddHostedService<NextDoseReminderService>();
+
 
 var app = builder.Build();
 

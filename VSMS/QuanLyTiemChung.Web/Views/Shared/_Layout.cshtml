@@ -3,23 +3,45 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Hệ Thống Tiêm Chủng</title>
-    
-    <!-- 🔥 THÊM META TAG CHO CURRENT USER ID -->
+
     @if (SignInManager.IsSignedIn(User))
     {
         <meta name="current-user-id" content="@UserManager.GetUserId(User)" />
     }
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        .notification-item-dropdown {
+            white-space: normal;
+            /* Cho phép text xuống dòng */
+            cursor: pointer;
+        }
+
+        .notification-item-dropdown.unread {
+            font-weight: bold;
+            background-color: #f0f2f5;
+        }
+
+        #notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+            min-width: 300px;
+            /* Đảm bảo dropdown đủ rộng */
+        }
+    </style>
+
 </head>
+
 <body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
@@ -27,8 +49,8 @@
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-syringe me-2"></i>Hệ Thống Tiêm Chủng
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarContent">
@@ -37,36 +59,56 @@
                         {
                             if (User.IsInRole("Admin"))
                             {
-                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Index">Dashboard</a></li>
-                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageUsers">Người dùng</a></li>
-                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageVaccines">Vắc-xin</a></li>
-                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageSites">Địa điểm</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Index">Dashboard</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageUsers">Người
+                                        dùng</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Admin"
+                                        asp-action="ManageVaccines">Vắc-xin</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageSites">Địa
+                                        điểm</a></li>
                             }
                             else if (User.IsInRole("HealthOfficial"))
                             {
-                                <li class="nav-item"><a class="nav-link" asp-controller="MedicalStaff" asp-action="Index">Quản lý Lịch hẹn</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="MedicalStaff" asp-action="Index">Quản
+                                        lý Lịch hẹn</a></li>
                             }
-                            else // Mặc định là người dân
+                            else // Mặc định là người dân (Citizen)
                             {
-                                <li class="nav-item"><a class="nav-link" asp-controller="Appointment" asp-action="Index">Lịch sử tiêm</a></li>
-                                <li class="nav-item"><a class="nav-link" asp-controller="Appointment" asp-action="Create">Đăng ký tiêm</a></li>
-                                <li class="nav-item"><a class="nav-link" asp-controller="Notification" asp-action="Index">Thông báo</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Appointment" asp-action="Index">Lịch sử
+                                        tiêm</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Appointment" asp-action="Create">Đăng
+                                        ký tiêm</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Notification" asp-action="Index">Thông
+                                        báo</a></li>
                             }
                         }
                     </ul>
 
-                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Citizen"))
-                    {
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Notification" asp-action="Index" id="notificationLink" title="Xem thông báo">
+                    <ul class="navbar-nav">
+                        @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Citizen") ||
+                                                User.IsInRole("HealthOfficial")))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-light" href="#" id="notification-bell" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false" title="Xem thông báo">
                                     <i class="fas fa-bell"></i>
-                                    <span class="badge rounded-pill bg-danger" id="notification-badge" style="position: absolute; top: 6px; display: none; font-size: 0.6em;"></span>
+                                    <span class="badge rounded-pill bg-danger" id="notification-count"
+                                        style="position: relative; top: -10px; left: -5px; display: none;"></span>
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notification-bell">
+                                    <div id="notification-list">
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-center small" id="mark-all-as-read" href="#">Đánh dấu tất
+                                        cả đã đọc</a>
+                                    <a class="dropdown-item text-center small"
+                                        href="@Url.Action("Index", "Notification")">Xem tất cả thông báo</a>
+                                </div>
                             </li>
-                        </ul>
-                    }
-                    <partial name="_LoginPartial" />
+                        }
+                        <partial name="_LoginPartial" />
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -91,168 +133,190 @@
             </div>
         </div>
     </div>
-    
+
     <footer class="footer border-top text-muted bg-light py-3 mt-auto">
         <div class="container text-center">
             &copy; @DateTime.Now.Year - Hệ Thống Quản Lý Tiêm Chủng
         </div>
     </footer>
-    
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @if (SignInManager.IsSignedIn(User))
     {
-        <!-- 🔥 SIGNALR CHO TẤT CẢ USERS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
         <script>
             $(document).ready(function () {
-                // **🔥 ROLE CHANGE SIGNALR CONNECTION**
-                const roleConnection = new signalR.HubConnectionBuilder()
+                // **Phần xử lý Role Change giữ nguyên**
+                const roleChangeConnection = new signalR.HubConnectionBuilder()
                     .withUrl("/adminHub")
                     .build();
 
-                // Start role change connection
-                roleConnection.start().then(function () {
-                    console.log("SignalR connected for role change notifications");
-                }).catch(function (err) {
-                    console.error("SignalR role change connection error: " + err.toString());
-                });
-
-                // Listen for role changes
-                roleConnection.on("RoleChanged", function (data) {
-                    console.log("Your role has been changed:", data);
-                    
-                    // Show notification
+                // 2. Lắng nghe sự kiện "RoleChanged" từ server
+                roleChangeConnection.on("RoleChanged", function (data) {
+                    // Hiển thị hộp thoại thông báo
                     showRoleChangeNotification(data);
-                    
-                    // Auto logout after 5 seconds
+
+                    // Tự động đăng xuất sau 5 giây
                     setTimeout(() => {
                         logout();
                     }, 5000);
                 });
 
-                // **🔥 EXISTING NOTIFICATION SIGNALR (CHỈ CHO CITIZEN)**
-                @if (User.IsInRole("Citizen"))
-                {
-                    <text>
-                    const notificationConnection = new signalR.HubConnectionBuilder().withUrl("/notificationHub").build();
-                    const badge = $('#notification-badge');
-                    const toastElement = $('#notificationToast');
-                    const toastBody = $('#notificationToastBody');
-                    const toast = new bootstrap.Toast(toastElement);
+                // 3. Bắt đầu kết nối đến AdminHub
+                roleChangeConnection.start().catch(err => console.error("RoleChange Hub Connection Error: " + err.toString()));
 
-                    function updateBadge() {
-                        $.getJSON("/Notification/GetUnreadCount", function (data) {
-                            if (data.count > 0) {
-                                badge.text(data.count).show();
-                            } else {
-                                badge.hide();
-                            }
-                        });
-                    }
-
-                    notificationConnection.on("ReceiveNotification", function (message, createdAt) {
-                        toastBody.html(`Bạn có thông báo mới. <a href="/Notification" class="text-decoration-underline">Nhấn vào đây để xem.</a>`);
-                        toast.show();
-                        updateBadge();
-                    });
-
-                    notificationConnection.start().then(updateBadge).catch(err => console.error(err.toString()));
-                    </text>
-                }
-
-                // **🔥 ROLE CHANGE NOTIFICATION FUNCTIONS**
+                // 4. Hàm hiển thị hộp thoại (modal) thông báo thay đổi quyền
                 function showRoleChangeNotification(data) {
                     const modalHtml = `
-                        <div class="modal fade" id="roleChangedModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content border-warning">
-                                    <div class="modal-header bg-warning text-dark">
-                                        <h5 class="modal-title">
-                                            <i class="fas fa-exclamation-triangle me-2"></i>
-                                            Quyền Truy Cập Đã Thay Đổi
-                                        </h5>
+                    <div class="modal fade" id="roleChangedModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-warning">
+                                <div class="modal-header bg-warning text-dark">
+                                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Quyền Truy Cập Đã Thay Đổi</h5>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <p class="lead">${data.message}</p>
+                                    <div class="alert alert-info">
+                                        Quyền cũ: <span class="badge bg-secondary">${data.oldRole}</span><br>
+                                        Quyền mới: <span class="badge bg-primary">${data.newRole}</span>
                                     </div>
-                                    <div class="modal-body text-center">
-                                        <div class="mb-4">
-                                            <i class="fas fa-user-shield fa-4x text-warning mb-3"></i>
-                                        </div>
-                                        <h5>Thông báo quan trọng!</h5>
-                                        <p class="lead">${data.message}</p>
-                                        
-                                        <div class="alert alert-info">
-                                            <strong>Chi tiết thay đổi:</strong><br>
-                                            Quyền cũ: <span class="badge bg-secondary">${data.oldRole}</span><br>
-                                            Quyền mới: <span class="badge bg-primary">${data.newRole}</span>
-                                        </div>
-                                        
-                                        <div class="countdown-container">
-                                            <p>Bạn sẽ được đăng xuất sau: <strong id="countdown">5</strong> giây</p>
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" 
-                                                     role="progressbar" style="width: 100%" id="countdownBar"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer justify-content-center">
-                                        <button type="button" class="btn btn-warning" onclick="logout()">
-                                            <i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất Ngay
-                                        </button>
-                                    </div>
+                                    <p>Bạn sẽ được đăng xuất sau: <strong id="countdown">5</strong> giây</p>
+                                </div>
+                                <div class="modal-footer justify-content-center">
+                                    <button type="button" class="btn btn-warning" onclick="logout()">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất Ngay
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    `;
-                    
-                    $('#roleChangedModal').remove();
+                    </div>`;
+
                     $('body').append(modalHtml);
-                    
                     const modal = new bootstrap.Modal(document.getElementById('roleChangedModal'));
                     modal.show();
-                    
-                    // Countdown timer
+
                     let countdown = 5;
-                    const countdownElement = document.getElementById('countdown');
-                    const progressBar = document.getElementById('countdownBar');
-                    
                     const timer = setInterval(() => {
                         countdown--;
-                        countdownElement.textContent = countdown;
-                        progressBar.style.width = (countdown / 5 * 100) + '%';
-                        
+                        $('#countdown').text(countdown);
                         if (countdown <= 0) {
                             clearInterval(timer);
-                            logout();
                         }
                     }, 1000);
                 }
 
-                // **🔥 FIXED LOGOUT FUNCTION - SỬ DỤNG POST REQUEST**
+                // 5. Hàm đăng xuất an toàn bằng phương thức POST
                 function logout() {
-                    // Tạo form POST để logout đúng cách
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '/Account/Logout';
-                    
-                    // Thêm CSRF token nếu có
-                    const token = document.querySelector('input[name="__RequestVerificationToken"]');
-                    if (token) {
-                        const tokenInput = document.createElement('input');
-                        tokenInput.type = 'hidden';
-                        tokenInput.name = '__RequestVerificationToken';
-                        tokenInput.value = token.value;
-                        form.appendChild(tokenInput);
+
+                    // Thêm AntiForgeryToken vào form để gửi đi
+                    const tokenInput = $('input[name="__RequestVerificationToken"]');
+                    if (tokenInput.length > 0) {
+                        form.appendChild(tokenInput[0].cloneNode());
                     }
-                    
+
                     document.body.appendChild(form);
                     form.submit();
                 }
-            });
+
+                // **🔥 CẬP NHẬT LOGIC SIGNALR VÀ GIAO DIỆN THÔNG BÁO CHO CITIZEN**
+                @if (User.IsInRole("Citizen") || User.IsInRole("HealthOfficial"))
+                    {
+                        <text>
+                            const notificationConnection = new signalR.HubConnectionBuilder().withUrl("/notificationHub").build();
+                            const badge = $('#notification-count');
+                            const notificationList = $('#notification-list');
+                            const toastElement = $('#notificationToast');
+                            const toastBody = $('#notificationToastBody');
+                            const toast = new bootstrap.Toast(toastElement);
+
+                            // Cập nhật số lượng trên badge
+                            function updateBadge() {
+                                $.getJSON("@Url.Action("GetUnreadCount", "Notification")", function (data) {
+                                    if (data.count > 0) {
+                                        badge.text(data.count).show();
+                                    } else {
+                                        badge.hide();
+                                    }
+                                });
+                                            }
+
+                            // Tải và hiển thị 5 thông báo mới nhất trong dropdown
+                            function loadNotifications() {
+                                $.getJSON("@Url.Action("GetNotifications", "Notification")", function (notifications) {
+                                    notificationList.empty(); // Xóa danh sách cũ
+                                    if (notifications && notifications.length > 0) {
+                                        $.each(notifications.slice(0, 5), function (i, n) {
+                                            const itemClass = n.isRead ? "" : "unread";
+                                            const item = $(`
+                                                                <a class="dropdown-item notification-item-dropdown ${itemClass}" href="${n.url || '#'}" data-id="${n.id}">
+                                                                    <div class="small">${n.message}</div>
+                                                                    <div class="text-muted small">${new Date(n.createdAt).toLocaleString('vi-VN')}</div>
+                                                                </a>
+                                                            `);
+                                            notificationList.append(item);
+                                        });
+                                    } else {
+                                        notificationList.append('<span class="dropdown-item text-muted">Không có thông báo mới.</span>');
+                                    }
+                                });
+                                            }
+
+                            // Lắng nghe thông báo mới từ server
+                            notificationConnection.on("ReceiveNotification", function (message, createdAt) {
+                                toastBody.html(`Bạn có thông báo mới. <a href="/Notification" class="text-decoration-underline">Nhấn vào đây để xem.</a>`);
+                            toast.show();
+                            updateBadge();
+                            loadNotifications(); // Tải lại danh sách trong dropdown
+                                            });
+
+                            // Bắt đầu kết nối và cập nhật badge
+                            notificationConnection.start().then(function() {
+                                updateBadge();
+                            loadNotifications();
+                                            }).catch(err => console.error(err.toString()));
+
+                            // Sự kiện khi click vào chuông
+                            $('#notification-bell').on('click', function() {
+                                loadNotifications();
+                                            });
+
+                            // Sự kiện khi click vào một thông báo trong dropdown
+                            notificationList.on('click', '.notification-item-dropdown', function (e) {
+                                e.preventDefault();
+                            const item = $(this);
+                            const id = item.data('id');
+                            const url = item.attr('href');
+
+                            // Gửi request POST để đánh dấu đã đọc
+                            $.post("@Url.Action("MarkAsRead", "Notification")/" + id, function() {
+                                window.location.href = url; // Chuyển hướng sau khi đánh dấu
+                                                });
+                                            });
+
+                            // Sự kiện khi click "Đánh dấu tất cả đã đọc"
+                            $('#mark-all-as-read').on('click', function(e) {
+                                e.preventDefault();
+                            $.post("@Url.Action("MarkAllAsRead", "Notification")", function() {
+                                updateBadge();
+                            loadNotifications();
+                                                });
+                                            });
+                        </text>
+                }
+
+                            // **Phần code xử lý Role Change của bạn giữ nguyên ở đây**
+                            // ... (code cho roleConnection, showRoleChangeNotification, logout, v.v...) ...
+                        });
         </script>
     }
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

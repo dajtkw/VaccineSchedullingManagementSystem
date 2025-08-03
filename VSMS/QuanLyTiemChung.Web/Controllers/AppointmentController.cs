@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuanLyTiemChung.Web.Data;
+using QuanLyTiemChung.Web.Hubs;
 using QuanLyTiemChung.Web.Interfaces;
 using QuanLyTiemChung.Web.Models;
 using QuanLyTiemChung.Web.ViewModels;
@@ -24,21 +26,29 @@ namespace QuanLyTiemChung.Web.Controllers
         private readonly IVaccinationRecordRepository _recordRepository;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<AppointmentController> _logger;
-
+        private readonly IVaccineCategoryRepository _categoryRepository;
+        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly INotificationRepository _notificationRepository;
         public AppointmentController(
             IAppointmentRepository appointmentRepository,
             IVaccinationSiteRepository siteRepository,
             UserManager<User> userManager,
             IVaccinationRecordRepository recordRepository,
             ApplicationDbContext context,
-            ILogger<AppointmentController> logger)
+            ILogger<AppointmentController> logger,
+            IVaccineCategoryRepository categoryRepository,
+            IHubContext<NotificationHub> hubContext,
+            INotificationRepository notificationRepository)
         {
             _appointmentRepository = appointmentRepository;
             _siteRepository = siteRepository;
             _userManager = userManager;
             _recordRepository = recordRepository;
+            _hubContext = hubContext;
             _context = context;
             _logger = logger;
+            _categoryRepository = categoryRepository;
+            _notificationRepository = notificationRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -48,7 +58,7 @@ namespace QuanLyTiemChung.Web.Controllers
             var appointments = await _appointmentRepository.GetViewModelsByUserIdAsync(user.Id);
             return View(appointments);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAppointmentsByStatus(string status = "all")
         {
@@ -80,7 +90,7 @@ namespace QuanLyTiemChung.Web.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Json(new { success = false, message = "Bạn cần đăng nhập để thực hiện." });
-            
+
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
@@ -109,7 +119,7 @@ namespace QuanLyTiemChung.Web.Controllers
                     inventoryItem.Quantity++;
                     _context.Update(inventoryItem);
                 }
-                
+
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -122,7 +132,7 @@ namespace QuanLyTiemChung.Web.Controllers
                 return Json(new { success = false, message = "Đã xảy ra lỗi, vui lòng thử lại." });
             }
         }
-        
+
         public async Task<IActionResult> Create()
         {
             var viewModel = new CreateAppointmentViewModel
@@ -132,13 +142,52 @@ namespace QuanLyTiemChung.Web.Controllers
             await PrepareCreateModelAsync(viewModel);
             return View(viewModel);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAppointmentViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Challenge();
+
+            if (model.DoseNumber > 1)
+            {
+                // 1. Tìm mũi tiêm hoàn thành gần nhất
+                var lastAppointment = await _appointmentRepository.GetLastCompletedAppointmentAsync(user.Id, model.SelectedVaccineId);
+
+                if (lastAppointment == null || lastAppointment.VaccinationRecord == null)
+                {
+                    // Nếu người dùng cố tình đăng ký mũi 2 mà chưa có mũi 1, báo lỗi.
+                    ModelState.AddModelError("", $"Bạn cần hoàn thành mũi {model.DoseNumber - 1} trước khi đăng ký mũi này.");
+                }
+                else
+                {
+                    // 2. Tìm thông tin về khoảng cách yêu cầu giữa các liều
+                    var vaccineInfo = await _context.Vaccines
+                        .Include(v => v.Doses)
+                        .FirstOrDefaultAsync(v => v.Id == model.SelectedVaccineId);
+
+                    // Tìm khoảng cách yêu cầu sau mũi tiêm trước đó (lastAppointment.DoseNumber)
+                    var requiredDoseInfo = vaccineInfo?.Doses.FirstOrDefault(d => d.DoseNumber == lastAppointment.DoseNumber);
+
+                    if (requiredDoseInfo?.IntervalInMonths.HasValue == true)
+                    {
+                        // 3. Tính ngày đủ điều kiện
+                        var lastVaccinationDate = lastAppointment.VaccinationRecord.ActualVaccinationTime;
+                        var nextEligibleDate = lastVaccinationDate.AddMonths(requiredDoseInfo.IntervalInMonths.Value);
+
+                        if (DateTime.Now < nextEligibleDate)
+                        {
+                            ModelState.AddModelError("", $"Bạn chưa đủ điều kiện đăng ký mũi này. Vui lòng quay lại sau ngày {nextEligibleDate:dd/MM/yyyy}.");
+                        }
+                    }
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                await PrepareCreateModelAsync(model);
+                return View(model);
+            }
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -169,9 +218,59 @@ namespace QuanLyTiemChung.Web.Controllers
                         CreatedAt = DateTime.UtcNow
                     };
                     _context.Appointments.Add(appointment);
-                    
+
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
+                    try
+                    {
+                        var createdAppointment = await _context.Appointments
+                            .Include(a => a.User)
+                            .Include(a => a.Vaccine)
+                            .Include(a => a.VaccinationSite)
+                            .FirstOrDefaultAsync(a => a.Id == appointment.Id);
+
+                        if (createdAppointment != null)
+                        {
+                            var medicalStaffs = await _userManager.GetUsersInRoleAsync("HealthOfficial");
+                            var tasks = new List<Task>();
+
+                            // Chuẩn bị ViewModel để gửi đi cho việc cập nhật bảng
+                            var newAppointmentViewModel = new AppointmentViewModel
+                            {
+                                Id = createdAppointment.Id,
+                                UserFullName = createdAppointment.User.FullName,
+                                VaccineName = createdAppointment.Vaccine.TradeName,
+                                SiteName = createdAppointment.VaccinationSite.Name,
+                                SiteAddress = createdAppointment.VaccinationSite.Address,
+                                ScheduledDateTime = createdAppointment.ScheduledDateTime,
+                                DoseNumber = createdAppointment.DoseNumber,
+                                Status = createdAppointment.Status,
+                                StatusBadgeClass = "badge bg-warning text-dark"
+                            };
+
+                            foreach (var staff in medicalStaffs)
+                            {
+                                // 1. Tạo và lưu thông báo vào CSDL (cho chuông và danh sách)
+                                var notification = NotificationFactory.CreateNewAppointmentForStaffNotification(staff, createdAppointment.User, createdAppointment.Vaccine);
+                                tasks.Add(_notificationRepository.AddAsync(notification));
+
+                                // 2. Gửi tín hiệu ĐƠN GIẢN để cập nhật chuông và toast
+                                tasks.Add(_hubContext.Clients.User(staff.Id.ToString())
+                                    .SendAsync("ReceiveNotification", notification.Message, notification.CreatedAt.ToString("o")));
+
+                                // 3. Gửi tín hiệu CHI TIẾT để cập nhật bảng real-time
+                                tasks.Add(_hubContext.Clients.User(staff.Id.ToString())
+                                    .SendAsync("ReceiveNewAppointment", newAppointmentViewModel));
+                            }
+
+                            await Task.WhenAll(tasks);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to send SignalR notification for new appointment.");
+                    }
+
 
                     TempData["StatusMessage"] = "Đăng ký lịch tiêm thành công! Vui lòng chờ xác nhận từ cán bộ y tế.";
                     return RedirectToAction(nameof(Index));
@@ -183,11 +282,11 @@ namespace QuanLyTiemChung.Web.Controllers
                 _logger.LogError(ex, "Error creating appointment for User {UserId}", user.Id);
                 ModelState.AddModelError("", "Đã xảy ra lỗi không mong muốn trong quá trình đặt lịch. Vui lòng thử lại.");
             }
-            
+
             await PrepareCreateModelAsync(model);
             return View(model);
         }
-        
+
         [HttpGet]
         public async Task<JsonResult> GetDistricts(string provinceName)
         {
@@ -201,7 +300,7 @@ namespace QuanLyTiemChung.Web.Controllers
                 .Distinct().OrderBy(d => d).ToList();
             return Json(districts);
         }
-        
+
         [HttpGet]
         public async Task<JsonResult> GetWards(string provinceName, string districtName)
         {
@@ -215,7 +314,7 @@ namespace QuanLyTiemChung.Web.Controllers
                 .Distinct().OrderBy(w => w).ToList();
             return Json(wards);
         }
-        
+
         [HttpGet]
         public async Task<JsonResult> GetSites(string provinceName, string districtName, string wardName)
         {
@@ -235,15 +334,16 @@ namespace QuanLyTiemChung.Web.Controllers
             }
 
             var filteredSites = sites
-                .Select(s => new SelectListItem { 
-                    Value = s.Id.ToString(), 
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
                     Text = $"{s.Name} - {s.Address}"
                 })
                 .OrderBy(s => s.Text).ToList();
-                
+
             return Json(filteredSites);
         }
-        
+
         [HttpGet]
         public async Task<JsonResult> GetProvinces()
         {
@@ -258,39 +358,59 @@ namespace QuanLyTiemChung.Web.Controllers
             return Json(provinces);
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetAvailableVaccines(int siteId)
-        {
-            if (siteId <= 0) return Json(new List<SelectListItem>());
 
-            var vaccinesInStock = await _context.SiteVaccineInventories
+        [HttpGet]
+        public async Task<JsonResult> GetAvailableVaccines(int siteId, int? categoryId)
+        {
+            if (siteId <= 0) return Json(new List<object>());
+
+            var query = _context.SiteVaccineInventories
                 .AsNoTracking()
                 .Include(i => i.Vaccine)
-                .Where(i => i.VaccinationSiteId == siteId && i.Quantity > 0)
-                .Select(i => new SelectListItem
-                {
-                    Value = i.VaccineId.ToString(),
-                    Text = $"{i.Vaccine.TradeName} (còn {i.Quantity} liều)"
-                })
+                .ThenInclude(v => v.Doses)
+                .Where(i => i.VaccinationSiteId == siteId && i.Quantity > 0);
+
+            if (categoryId.HasValue && categoryId > 0)
+            {
+                query = query.Where(i => i.Vaccine.VaccineCategoryId == categoryId.Value);
+            }
+
+            var vaccinesInStock = await query
+                .OrderBy(i => i.Vaccine.GenericName)
                 .ToListAsync();
 
-            return Json(vaccinesInStock);
+            // Phần code nhóm dữ liệu phía dưới giữ nguyên
+            var groupedVaccines = vaccinesInStock
+                .GroupBy(i => i.Vaccine.GenericName)
+                .Select(group => new
+                {
+                    GroupName = group.Key,
+                    Vaccines = group.Select(item => new
+                    {
+                        Value = item.VaccineId,
+                        Text = $"{item.Vaccine.TradeName} (còn {item.Quantity} liều)",
+                        IsScheduledDose = item.Vaccine.Doses.Count > 1 && item.Vaccine.Doses.Any(d => d.IntervalInMonths.HasValue)
+
+                    })
+                });
+
+            return Json(groupedVaccines);
         }
-        
+
         public async Task<IActionResult> VaccinationCertificate(int appointmentId)
         {
             var record = await _recordRepository.GetByAppointmentIdAsync(appointmentId);
-            
+
             if (record == null) return NotFound();
 
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
             if (record.Appointment.UserId != currentUser.Id) return Forbid();
-            
+
             return View(record);
         }
-        
+
         private async Task PrepareCreateModelAsync(CreateAppointmentViewModel model)
         {
             // The province list is now loaded via AJAX by the new GetProvinces() endpoint,
@@ -298,5 +418,14 @@ namespace QuanLyTiemChung.Web.Controllers
             model.AvailableProvinces = new List<SelectListItem>();
             model.AvailableVaccines = new List<Vaccine>();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCategoriesJson()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+            var result = categories.Select(c => new { id = c.Id, name = c.Name });
+            return Json(result);
+        }
+
     }
 }

@@ -33,8 +33,16 @@
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
+      "Id": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
       "Id": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
       "Id": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery\\LICENSE.txt",

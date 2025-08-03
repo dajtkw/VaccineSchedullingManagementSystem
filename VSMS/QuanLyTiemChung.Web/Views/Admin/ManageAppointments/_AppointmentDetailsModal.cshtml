@@ -1,7 +1,6 @@
 @* Views/Admin/ManageAppointments/_AppointmentDetailsModal.cshtml *@
 @model QuanLyTiemChung.Web.Models.Appointment
 @{
-    // Sao chép logic lấy màu cho trạng thái từ view danh sách để đảm bảo nhất quán
     Func<string, string> GetStatusBadgeClass = (status) =>
     {
         return status switch
@@ -28,19 +27,19 @@ else
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Họ và tên:</strong>
-                        <span>@(Model.User?.FullName ?? "Không có dữ liệu")</span>
+                        <span>@(Model.User?.FullName ?? "N/A")</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Email:</strong>
-                        <span>@(Model.User?.Email ?? "Không có dữ liệu")</span>
+                        <span>@(Model.User?.Email ?? "N/A")</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Số điện thoại:</strong>
-                        <span>@(Model.User?.PhoneNumber ?? "Chưa có")</span>
+                        <span>@(Model.User?.PhoneNumber ?? "N/A")</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Ngày sinh:</strong>
-                        <span>@(Model.User?.DateOfBirth.ToString("dd/MM/yyyy") ?? "Không có dữ liệu")</span>
+                        <span>@(Model.User?.DateOfBirth.ToString("dd/MM/yyyy") ?? "N/A")</span>
                     </li>
                 </ul>
             </div>
@@ -71,7 +70,7 @@ else
                     <div class="card-body">
                         <dl class="row mb-0">
                             <dt class="col-sm-3">Vắc-xin:</dt>
-                            <dd class="col-sm-9">@(Model.Vaccine?.TradeName ?? "Không có dữ liệu")</dd>
+                            <dd class="col-sm-9">@(Model.Vaccine?.TradeName ?? "N/A")</dd>
 
                             <dt class="col-sm-3">Mũi thứ:</dt>
                             <dd class="col-sm-9">@Model.DoseNumber</dd>
@@ -79,15 +78,31 @@ else
                             <hr class="my-2">
 
                             <dt class="col-sm-3">Địa điểm tiêm:</dt>
-                            <dd class="col-sm-9">@(Model.VaccinationSite?.Name ?? "Không có dữ liệu")</dd>
+                            <dd class="col-sm-9">@(Model.VaccinationSite?.Name ?? "N/A")</dd>
 
                             <dt class="col-sm-3">Địa chỉ:</dt>
-                            <dd class="col-sm-9">@(Model.VaccinationSite?.Address ?? "Không có dữ liệu")</dd>
+                            <dd class="col-sm-9">@(Model.VaccinationSite?.Address ?? "N/A")</dd>
                         </dl>
                     </div>
                 </div>
             </div>
         </div>
+
+        @* 🔥 BẮT ĐẦU PHẦN BỔ SUNG GHI CHÚ *@
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6 class="mb-3 text-primary"><i class="fas fa-sticky-note me-2"></i>Ghi chú từ người đăng ký</h6>
+                    <div class="card bg-light border">
+                        <div class="card-body">
+                            <p class="mb-0 fst-italic">"@Model.Notes"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @* 🔥 KẾT THÚC PHẦN BỔ SUNG GHI CHÚ *@
     </div>
 
     <div class="modal-footer mt-3">

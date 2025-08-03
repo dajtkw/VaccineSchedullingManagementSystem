@@ -3,6 +3,17 @@
     ViewData["Title"] = "Tất Cả Thông Báo";
 }
 
+<style>
+    .notification-item.unread {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+    .notification-item a {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
+
 <h2 class="mb-4">@ViewData["Title"]</h2>
 
 <div class="list-group">
@@ -10,12 +21,16 @@
     {
         @foreach (var notification in Model)
         {
-            <div class="list-group-item list-group-item-action flex-column align-items-start">
+            var itemClass = notification.IsRead ? "" : "unread";
+            // Nếu không có URL, mặc định trỏ đến trang thông báo chính
+            var targetUrl = string.IsNullOrEmpty(notification.Url) ? "#" : notification.Url;
+
+            <a href="@targetUrl" class="list-group-item list-group-item-action flex-column align-items-start notification-item @itemClass">
                 <div class="d-flex w-100 justify-content-between">
                     <p class="mb-1">@notification.Message</p>
-                    <small class="text-muted">@notification.CreatedAt.ToString("HH:mm dd/MM/yyyy")</small>
+                    <small class="text-muted">@notification.CreatedAt.ToLocalTime().ToString("HH:mm dd/MM/yyyy")</small>
                 </div>
-            </div>
+            </a>
         }
     }
     else

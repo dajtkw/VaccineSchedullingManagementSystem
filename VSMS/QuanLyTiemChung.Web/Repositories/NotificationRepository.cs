@@ -40,5 +40,14 @@ namespace QuanLyTiemChung.Web.Repositories
             }
             await _context.SaveChangesAsync();
         }
+        public async Task MarkAsReadAsync(long notificationId)
+        {
+            var notification = await _context.Notifications.FindAsync(notificationId);
+            if (notification != null && !notification.IsRead)
+            {
+                notification.IsRead = true;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

@@ -140,5 +140,14 @@ namespace QuanLyTiemChung.Web.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<Appointment?> GetLastCompletedAppointmentAsync(int userId, int vaccineId)
+        {
+            return await _context.Appointments
+                .Where(a => a.UserId == userId && a.VaccineId == vaccineId && a.Status == "Completed")
+                .Include(a => a.VaccinationRecord) // Tải kèm hồ sơ tiêm chủng để lấy ngày tiêm thực tế
+                .OrderByDescending(a => a.ScheduledDateTime)
+                .FirstOrDefaultAsync();
+        }
     }
 }

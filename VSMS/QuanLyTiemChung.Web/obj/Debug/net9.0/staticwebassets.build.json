@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2cKyvLj8KZzNegL9ULMjXsqGcCeWpe5tsv6j/ESOIn4=",
+  "Hash": "m66ml82UqyyVukATZeG/j0HmcRDvh+FvBW15mYdrHGI=",
   "Source": "QuanLyTiemChung.Web",
   "BasePath": "_content/QuanLyTiemChung.Web",
   "Mode": "Default",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\css\\admin-spa.css"
+    },
+    {
+      "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\a1bt2htlhk-6d0lkjaslc.gz",
+      "SourceId": "QuanLyTiemChung.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/QuanLyTiemChung.Web",
+      "RelativePath": "lib/jquery-validation/dist/jquery.validate#[.{fingerprint=6d0lkjaslc}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "felz1xh0fq",
+      "Integrity": "FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
       "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\heoiasopxm-x0q3zqp4vz.gz",
@@ -141,6 +162,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\p71gu47lrm-d171zkdrjx.gz",
+      "SourceId": "QuanLyTiemChung.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/QuanLyTiemChung.Web",
+      "RelativePath": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min#[.{fingerprint=d171zkdrjx}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "hr3rd6jaw6",
+      "Integrity": "zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
       "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\w0s77fmury-61n19gt1b8.gz",
@@ -395,6 +437,27 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\LICENSE"
     },
     {
+      "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "SourceId": "QuanLyTiemChung.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\",
+      "BasePath": "_content/QuanLyTiemChung.Web",
+      "RelativePath": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "d171zkdrjx",
+      "Integrity": "H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
       "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "SourceId": "QuanLyTiemChung.Web",
       "SourceType": "Discovered",
@@ -414,6 +477,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "SourceId": "QuanLyTiemChung.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\",
+      "BasePath": "_content/QuanLyTiemChung.Web",
+      "RelativePath": "lib/jquery-validation/dist/jquery.validate#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "6d0lkjaslc",
+      "Integrity": "5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
       "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
@@ -2032,6 +2116,304 @@
       ]
     },
     {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.d171zkdrjx.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\p71gu47lrm-d171zkdrjx.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000451263538"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2215"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "d171zkdrjx"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.d171zkdrjx.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5871"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "d171zkdrjx"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.d171zkdrjx.js.gz",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\p71gu47lrm-d171zkdrjx.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2215"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "d171zkdrjx"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\p71gu47lrm-d171zkdrjx.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000451263538"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2215"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5871"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-H8OdhvNWpxCHXd9Osw8R7yOsWj9CQKGDMlujYVBsYMw="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js.gz",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\p71gu47lrm-d171zkdrjx.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2215"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zQA14FIh4cFDo043ufK+CfxuzLXi+01GIjzkftRUqu4="
+        }
+      ]
+    },
+    {
       "Route": "lib/jquery-validation-unobtrusive/LICENSE.356vix0kms.txt",
       "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\z5cw0as5vq-356vix0kms.gz",
       "Selectors": [
@@ -2326,6 +2708,304 @@
         {
           "Name": "integrity",
           "Value": "sha256-WpL0kbwDHONKwUu+fAC6nKQXtZOBY20Gsspcn336Iz4="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.6d0lkjaslc.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\a1bt2htlhk-6d0lkjaslc.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000071942446"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13899"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6d0lkjaslc"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation/dist/jquery.validate.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.6d0lkjaslc.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52831"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6d0lkjaslc"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation/dist/jquery.validate.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.6d0lkjaslc.js.gz",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\a1bt2htlhk-6d0lkjaslc.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13899"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6d0lkjaslc"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation/dist/jquery.validate.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\a1bt2htlhk-6d0lkjaslc.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000071942446"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13899"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52831"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-5qqb5VxQ2t2a6Zx/neW5uppLLvaGn4nn0NdYp6g8Lyg="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.js.gz",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\a1bt2htlhk-6d0lkjaslc.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13899"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 12:28:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-FyypKrACVrdJlsJO2vyzJHYtMrXIYPhrZNHNKt6/29o="
         }
       ]
     },

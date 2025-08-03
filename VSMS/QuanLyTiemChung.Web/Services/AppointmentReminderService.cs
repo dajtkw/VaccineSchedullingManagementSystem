@@ -18,7 +18,8 @@ namespace QuanLyTiemChung.Web.Services
         private readonly IServiceProvider _services;
         private Timer? _timer = null;
 
-        public AppointmentReminderService(IServiceProvider services, ILogger<AppointmentReminderService> logger)
+        public AppointmentReminderService(IServiceProvider services, 
+        ILogger<AppointmentReminderService> logger)
         {
             _services = services;
             _logger = logger;
@@ -50,12 +51,7 @@ namespace QuanLyTiemChung.Web.Services
                 {
                     _logger.LogInformation($"Found upcoming appointment for user {appointment.UserId}.");
 
-                    var notification = new Notification
-                    {
-                        UserId = appointment.UserId,
-                        Message = $"Nhắc lịch: Bạn có lịch hẹn tiêm vắc-xin '{appointment.Vaccine.TradeName}' vào lúc {appointment.ScheduledDateTime:HH:mm dd/MM/yyyy}.",
-                        NotificationType = "AppointmentReminder"
-                    };
+                    var notification = NotificationFactory.CreateAppointmentReminderNotification(appointment);
 
                     // Lưu thông báo vào DB
                     notificationRepository.AddAsync(notification).Wait();
