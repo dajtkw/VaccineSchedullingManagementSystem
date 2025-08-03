@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QuanLyTiemChung.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c25d6e179da2b3552c61a39507e4b251e8307501")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60fddd17aa8e33160b1715e113c8aaf9e92bec23")]
 [assembly: System.Reflection.AssemblyProductAttribute("QuanLyTiemChung.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QuanLyTiemChung.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

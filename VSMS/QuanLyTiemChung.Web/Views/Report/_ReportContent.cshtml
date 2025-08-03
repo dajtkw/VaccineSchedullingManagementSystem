@@ -1,0 +1,156 @@
+<div class="container-fluid">
+    <!-- Các thẻ thống kê tổng quan -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Chờ xác nhận</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-pending">0</div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-clock fa-2x text-gray-300"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Đã xác nhận</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-confirmed">0</div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-calendar-check fa-2x text-gray-300"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Đã hoàn thành</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-completed">0</div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-check-double fa-2x text-gray-300"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Đã hủy</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-cancelled">0</div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-times-circle fa-2x text-gray-300"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng chứa các biểu đồ -->
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Lịch hẹn mới trong 30 ngày qua</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="appointmentsByDayChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Top 5 vắc-xin được tiêm nhiều nhất</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4">
+                        <canvas id="topVaccinesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm thư viện Chart.js và mã JavaScript để vẽ biểu đồ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    $(document).ready(function() {
+        // Hàm để tạo biểu đồ đường
+        function createLineChart(ctx, labels, data) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Số lịch hẹn",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        data: data,
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: { y: { ticks: { beginAtZero: true } } }
+                }
+            });
+        }
+
+        // Hàm để tạo biểu đồ cột
+        function createBarChart(ctx, labels, data) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Số lượt tiêm",
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
+                        data: data,
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: { display: false },
+                    scales: { y: { ticks: { beginAtZero: true } } }
+                }
+            });
+        }
+
+        // Gọi API để lấy dữ liệu và cập nhật giao diện
+        $.getJSON('/Report/GetReportData')
+            .done(function(data) {
+                // Cập nhật các thẻ thống kê
+                $('#total-pending').text(data.totalPending);
+                $('#total-confirmed').text(data.totalConfirmed);
+                $('#total-completed').text(data.totalCompleted);
+                $('#total-cancelled').text(data.totalCancelled);
+
+                // Vẽ biểu đồ
+                const appointmentsCtx = document.getElementById('appointmentsByDayChart');
+                const topVaccinesCtx = document.getElementById('topVaccinesChart');
+
+                if (appointmentsCtx && data.appointmentsByDay) {
+                    createLineChart(appointmentsCtx, data.appointmentsByDay.labels, data.appointmentsByDay.data);
+                }
+                if (topVaccinesCtx && data.topVaccines) {
+                    createBarChart(topVaccinesCtx, data.topVaccines.labels, data.topVaccines.data);
+                }
+            })
+            .fail(function() {
+                console.error("Failed to load report data.");
+            });
+    });
+</script>
