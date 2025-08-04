@@ -40,6 +40,8 @@ builder.Services.AddScoped<IVaccineCategoryRepository, VaccineCategoryRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddHostedService<AppointmentReminderService>();
 builder.Services.AddHostedService<NextDoseReminderService>();
+builder.Services.AddHostedService<SystemStatusService>();
+
 
 
 var app = builder.Build();
@@ -78,7 +80,8 @@ app.UseAuthorization();
 
 // 🔥 MAP SIGNALR HUBS
 app.MapHub<NotificationHub>("/notificationHub");
-app.MapHub<AdminHub>("/adminHub"); // 🔥 THÊM DÒNG NÀY
+app.MapHub<AdminHub>("/adminHub"); 
+app.MapHub<QuanLyTiemChung.Web.Hubs.DashboardHub>("/dashboardHub");
 
 app.MapControllerRoute(
     name: "default",

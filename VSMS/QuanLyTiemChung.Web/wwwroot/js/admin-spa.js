@@ -284,6 +284,7 @@ function loadContent(target, pushState = true) {
     vaccines: "Quản Lý Vắc-xin",
     categories: "Danh Mục Vắc-xin",
     sites: "Điểm Tiêm Chủng",
+    reports: "Thống kê & Báo cáo"
   };
 
   pageTitle.text(titles[target] || "Quản Trị");
@@ -301,6 +302,7 @@ function loadContent(target, pushState = true) {
     categories: "/Admin/GetCategoriesData",
     sites: "/Admin/GetSitesData",
     inventory: "/Admin/GetInventoryManagementView",
+    reports: "/Report/Index"
   };
 
   $.ajax({

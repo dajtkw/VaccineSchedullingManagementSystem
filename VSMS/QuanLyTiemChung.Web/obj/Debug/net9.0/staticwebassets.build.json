@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "m66ml82UqyyVukATZeG/j0HmcRDvh+FvBW15mYdrHGI=",
+  "Hash": "hFAGkdalwvcNKnDtvXFQtJDkQVBJ6UOFTqIOsXHPIq4=",
   "Source": "QuanLyTiemChung.Web",
   "BasePath": "_content/QuanLyTiemChung.Web",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-eu8s2l6m68.gz",
+      "Identity": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-oz9ln3bep8.gz",
       "SourceId": "QuanLyTiemChung.Web",
       "SourceType": "Discovered",
       "ContentRoot": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/QuanLyTiemChung.Web",
-      "RelativePath": "js/admin-spa#[.{fingerprint=eu8s2l6m68}]?.js.gz",
+      "RelativePath": "js/admin-spa#[.{fingerprint=oz9ln3bep8}]?.js.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -31,8 +31,8 @@
       "RelatedAsset": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\js\\admin-spa.js",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "bvqj02l3ql",
-      "Integrity": "OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc=",
+      "Fingerprint": "vgkyzodxb9",
+      "Integrity": "Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\js\\admin-spa.js"
@@ -388,8 +388,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "eu8s2l6m68",
-      "Integrity": "Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY=",
+      "Fingerprint": "oz9ln3bep8",
+      "Integrity": "1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\admin-spa.js"
@@ -1438,13 +1438,13 @@
       ]
     },
     {
-      "Route": "js/admin-spa.eu8s2l6m68.js",
-      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-eu8s2l6m68.gz",
+      "Route": "js/admin-spa.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-oz9ln3bep8.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000113250283"
+          "Quality": "0.000112790435"
         }
       ],
       "ResponseHeaders": [
@@ -1454,19 +1454,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8829"
+          "Value": "8865"
         },
         {
           "Name": "ETag",
-          "Value": "\"OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc=\""
+          "Value": "\"Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Aug 2025 05:05:33 GMT"
+          "Value": "Sun, 03 Aug 2025 17:21:30 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
+          "Value": "no-cache"
         },
         {
           "Name": "Content-Encoding",
@@ -1482,26 +1482,18 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY=\""
+          "Value": "W/\"1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU=\""
         }
       ],
       "EndpointProperties": [
         {
-          "Name": "fingerprint",
-          "Value": "eu8s2l6m68"
-        },
-        {
-          "Name": "label",
-          "Value": "js/admin-spa.js"
-        },
-        {
           "Name": "integrity",
-          "Value": "sha256-Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY="
+          "Value": "sha256-1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU="
         }
       ]
     },
     {
-      "Route": "js/admin-spa.eu8s2l6m68.js",
+      "Route": "js/admin-spa.js",
       "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\js\\admin-spa.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1511,7 +1503,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "40810"
+          "Value": "40878"
         },
         {
           "Name": "Content-Type",
@@ -1519,11 +1511,156 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY=\""
+          "Value": "\"1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Aug 2025 05:05:33 GMT"
+          "Value": "Sun, 03 Aug 2025 17:21:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin-spa.js.gz",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-oz9ln3bep8.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8865"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 17:21:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin-spa.oz9ln3bep8.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-oz9ln3bep8.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000112790435"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8865"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 17:21:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "oz9ln3bep8"
+        },
+        {
+          "Name": "label",
+          "Value": "js/admin-spa.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin-spa.oz9ln3bep8.js",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\js\\admin-spa.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "40878"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 03 Aug 2025 17:21:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1533,7 +1670,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "eu8s2l6m68"
+          "Value": "oz9ln3bep8"
         },
         {
           "Name": "label",
@@ -1541,13 +1678,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY="
+          "Value": "sha256-1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU="
         }
       ]
     },
     {
-      "Route": "js/admin-spa.eu8s2l6m68.js.gz",
-      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-eu8s2l6m68.gz",
+      "Route": "js/admin-spa.oz9ln3bep8.js.gz",
+      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-oz9ln3bep8.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1556,7 +1693,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8829"
+          "Value": "8865"
         },
         {
           "Name": "Content-Type",
@@ -1564,11 +1701,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc=\""
+          "Value": "\"Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Aug 2025 05:05:33 GMT"
+          "Value": "Sun, 03 Aug 2025 17:21:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1586,7 +1723,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "eu8s2l6m68"
+          "Value": "oz9ln3bep8"
         },
         {
           "Name": "label",
@@ -1594,144 +1731,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc="
-        }
-      ]
-    },
-    {
-      "Route": "js/admin-spa.js",
-      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-eu8s2l6m68.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000113250283"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "8829"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 02 Aug 2025 05:05:33 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/javascript"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY="
-        }
-      ]
-    },
-    {
-      "Route": "js/admin-spa.js",
-      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\wwwroot\\js\\admin-spa.js",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "40810"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/javascript"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 02 Aug 2025 05:05:33 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY="
-        }
-      ]
-    },
-    {
-      "Route": "js/admin-spa.js.gz",
-      "AssetFile": "F:\\chuacode\\Computer Network Programming\\VaccineSchedullingManagementSystem\\VSMS\\QuanLyTiemChung.Web\\obj\\Debug\\net9.0\\compressed\\1hxqxxxr9k-eu8s2l6m68.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "8829"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/javascript"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 02 Aug 2025 05:05:33 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-OZm3iRP2yd3nhgTd71e0d8mNvb2XBrDhp6b+cANmqZc="
+          "Value": "sha256-Hw9i5XvfGcImMqVU8Qtj9nzDt0gbs386R+fZQONNjCQ="
         }
       ]
     },

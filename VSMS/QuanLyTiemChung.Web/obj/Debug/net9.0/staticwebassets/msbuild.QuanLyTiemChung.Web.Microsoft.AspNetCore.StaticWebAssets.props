@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>eu8s2l6m68</Fingerprint>
-      <Integrity>Ok6vgzIhfYT/nlF3eYRqqp2Ebzd2B2n+ps+tYBX/OIY=</Integrity>
+      <Fingerprint>oz9ln3bep8</Fingerprint>
+      <Integrity>1LiyBN63cbpryLpAzRPAltkewLAtnj6uQ2gNRbo7oEU=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\admin-spa.js'))</OriginalItemSpec>

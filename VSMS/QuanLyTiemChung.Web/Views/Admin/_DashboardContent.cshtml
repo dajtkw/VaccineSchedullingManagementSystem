@@ -1,6 +1,6 @@
-@* Views/Admin/_DashboardContent.cshtml *@
 @model QuanLyTiemChung.Web.ViewModels.AdminDashboardViewModel
 
+@* Phần thống kê tĩnh *@
 <div class="row mb-4">
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
@@ -17,7 +17,8 @@
             </div>
         </div>
     </div>
-    </div>
+    @* Thêm các thẻ thống kê khác nếu bạn muốn *@
+</div>
 
 <div class="row">
     <div class="col-lg-8">
@@ -26,35 +27,123 @@
                 <h6 class="m-0 font-weight-bold text-primary">Truy cập nhanh</h6>
             </div>
             <div class="card-body">
+                @* 🔥 BẮT ĐẦU PHẦN TRUY CẬP NHANH ĐÃ ĐƯỢC KHÔI PHỤC *@
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <a href="#" class="btn btn-outline-primary btn-block" onclick="loadContent('users')">
+                        <a href="#" class="btn btn-outline-primary d-block" onclick="loadContent('users')">
                             <i class="fas fa-users me-2"></i>Quản Lý Người Dùng
                         </a>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <a href="#" class="btn btn-outline-success btn-block" onclick="loadContent('appointments')">
+                        <a href="#" class="btn btn-outline-success d-block" onclick="loadContent('appointments')">
                             <i class="fas fa-calendar-check me-2"></i>Quản Lý Lịch Hẹn
                         </a>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <a href="#" class="btn btn-outline-info btn-block" onclick="loadContent('vaccines')">
+                        <a href="#" class="btn btn-outline-info d-block" onclick="loadContent('vaccines')">
                             <i class="fas fa-syringe me-2"></i>Quản Lý Vắc-xin
                         </a>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <a href="#" class="btn btn-outline-warning btn-block" onclick="loadContent('sites')">
+                        <a href="#" class="btn btn-outline-warning d-block" onclick="loadContent('sites')">
                             <i class="fas fa-map-marker-alt me-2"></i>Quản Lý Điểm Tiêm
                         </a>
                     </div>
-                    @* --- BUTTON MỚI ĐƯỢC THÊM VÀO --- *@
                     <div class="col-md-6 mb-3">
-                        <a href="#" class="btn btn-outline-dark btn-block" onclick="loadContent('inventory')">
+                        <a href="#" class="btn btn-outline-dark d-block" onclick="loadContent('inventory')">
                             <i class="fas fa-boxes me-2"></i>Quản Lý Tồn Kho
                         </a>
                     </div>
+                     <div class="col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-secondary d-block" onclick="loadContent('reports')">
+                            <i class="fas fa-chart-line me-2"></i>Thống kê & Báo cáo
+                        </a>
+                    </div>
                 </div>
+                @* 🔥 KẾT THÚC PHẦN TRUY CẬP NHANH *@
             </div>
         </div>
     </div>
 </div>
+
+
+@* PHẦN THỐNG KÊ THỜI GIAN THỰC (GIỮ NGUYÊN) *@
+<h4 class="mb-3">Trạng Thái Hệ Thống (Thời gian thực)</h4>
+<div class="row">
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-microchip me-2 text-info"></i>Tải CPU</h5>
+                <div class="progress" style="height: 25px;">
+                    <div id="cpu-progress" class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-memory me-2 text-warning"></i>Sử dụng RAM</h5>
+                <div class="progress" style="height: 25px;">
+                    <div id="ram-progress" class="progress-bar bg-warning progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users me-2 text-success"></i>Người dùng Online</h5>
+                <p class="display-6 fw-bold text-success" id="online-users">0</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Script này phải là một phần của partial view vì nó được tải động *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+<script>
+    if (typeof dashboardConnection === 'undefined' || dashboardConnection.state === 'Disconnected') {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/dashboardHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        window.dashboardConnection = connection;
+
+        connection.on("ReceiveSystemStatus", (status) => {
+            const cpuProgress = $('#cpu-progress');
+            if (cpuProgress.length) {
+                cpuProgress.css('width', status.cpuLoad + '%').text(status.cpuLoad + '%').attr('aria-valuenow', status.cpuLoad);
+            }
+
+            const ramProgress = $('#ram-progress');
+            if (ramProgress.length) {
+                ramProgress.css('width', status.memoryUsage + '%').text(status.memoryUsage + '%').attr('aria-valuenow', status.memoryUsage);
+            }
+
+            const onlineUsers = $('#online-users');
+            if (onlineUsers.length) {
+                onlineUsers.text(status.onlineUsers);
+            }
+        });
+
+        async function start() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected to DashboardHub.");
+            } catch (err) {
+                console.error("SignalR DashboardHub Connection Error: ", err);
+                setTimeout(start, 5000);
+            }
+        };
+
+        connection.onclose(async () => {
+            await start();
+        });
+
+        start();
+    }
+</script>
