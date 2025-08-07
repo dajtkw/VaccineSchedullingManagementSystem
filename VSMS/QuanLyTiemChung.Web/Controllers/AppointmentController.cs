@@ -215,7 +215,7 @@ namespace QuanLyTiemChung.Web.Controllers
                         DoseNumber = model.DoseNumber,
                         Notes = model.Notes,
                         Status = "Pending",
-                        CreatedAt = DateTime.UtcNow
+                        CreatedAt = DateTime.Now
                     };
                     _context.Appointments.Add(appointment);
 
