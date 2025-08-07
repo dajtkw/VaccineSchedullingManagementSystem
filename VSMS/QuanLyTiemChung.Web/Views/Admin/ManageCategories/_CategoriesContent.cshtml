@@ -19,7 +19,6 @@
                 <thead class="table-light">
                     <tr>
                         <th class="ps-4">Tên Danh mục</th>
-                        <th class="text-center">Số Vắc-xin</th>
                         <th class="text-end pe-4">Hành động</th>
                     </tr>
                 </thead>
@@ -30,9 +29,7 @@
                             <td class="align-middle ps-4">
                                 <strong>@item.Name</strong>
                             </td>
-                            <td class="text-center align-middle">
-                                <span class="badge bg-info">@(item.Vaccines?.Count() ?? 0) vắc-xin</span>
-                            </td>
+                            
                             <td class="text-end pe-4">
                                 <div class="btn-group">
                                     <button class="btn btn-sm btn-outline-primary" onclick="editCategory(@item.Id, '@item.Name')">

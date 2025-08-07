@@ -91,6 +91,8 @@ namespace QuanLyTiemChung.Web.Repositories
         a.Status == "Cancelled" ? "badge bg-danger" :
         "badge bg-secondary"
                 })
+                .OrderByDescending(a => a.Status == "Pending")
+                .ThenByDescending(a => a.ScheduledDateTime)
                 .ToListAsync();
         }
 
